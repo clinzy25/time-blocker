@@ -19,5 +19,5 @@ const Wrapper = styled.section`
   padding: 8px 8px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-gap: 8px;
+  grid-gap: 2px;
 `;

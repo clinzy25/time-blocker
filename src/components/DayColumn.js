@@ -12,21 +12,21 @@ export const DayColumn = ({ day }) => {
 
   const getTasks = (cellKey) => {
     return tasks
-    ? tasks.map((task) => {
-      if (task.key === cellKey) {
-        return <Task cellKey={cellKey} />;
-      }
-    })
-    : null;
+      ? tasks.map((task) => {
+          if (task.key === cellKey) {
+            return <Task cellKey={cellKey} />;
+          }
+        })
+      : null;
   };
-    
+
   return (
     <Wrapper gridInterval={timeColumn.length}>
       <h2>{day}</h2>
       {timeColumn.map((_, index) => {
         index++;
-        console.log(index)
         const cellKey = day.substr(0, 2).concat(index);
+        let hasTask = false;
         return (
           <div
             key={cellKey}
@@ -34,14 +34,16 @@ export const DayColumn = ({ day }) => {
             style={{ gridArea: `${2} / 1 / ${index + 2} / 2;` }}
             onMouseEnter={() => {
               setBtnKey(index);
-              setShowBtn(true);
+              if (!hasTask) {
+                setShowBtn(true);
+              }
             }}
             onMouseLeave={() => {
               setBtnKey(null);
               setShowBtn(false);
             }}
           >
-            {showBtn && index === btnKey ? (
+            {showBtn && !hasTask && index === btnKey ? (
               <FaPlusSquare
                 className='add-task-btn'
                 onClick={() => {
@@ -52,6 +54,7 @@ export const DayColumn = ({ day }) => {
                     title: 'New Task',
                     textContent: '',
                   });
+                  setShowBtn(false);
                 }}
               />
             ) : null}
@@ -80,16 +83,25 @@ const Wrapper = styled.div`
     text-transform: capitalize;
   }
   .task-slot {
+    display: flex;
+    align-content: center;
     height: 100%;
     width: 100%;
-    border-bottom: 5px solid var(--clr-background-dark2);
+    border-top: 2px dotted var(--clr-background-dark);
+    :hover {
+      display: block;
+    }
   }
   .add-task-btn {
-    height: 20px;
-    width: 20px;
-    margin: 5px;
+    height: 25px;
+    width: 25px;
+    margin: 10px 0 0 5px;
     color: var(--clr-background-dark);
-    display: hidden;
     cursor: pointer;
+  }
+  .sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
   }
 `;
