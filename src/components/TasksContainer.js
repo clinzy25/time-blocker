@@ -8,7 +8,7 @@ export const TasksContainer = () => {
   return (
     <Wrapper>
       {dayOrder.map((day, index) => {
-        return <DayColumn day={day} key={index} />;
+        return <DayColumn key={day} day={day} />;
       })}
     </Wrapper>
   );

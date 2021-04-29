@@ -3,6 +3,7 @@ import {
   GET_TIMES,
   SHIFT_DAYS,
   SET_TIME_RANGE,
+  ADD_TASK,
 } from './actions';
 
 const table_reducer = (state, action) => {
@@ -26,7 +27,7 @@ const table_reducer = (state, action) => {
       const timeRangeToMs = state.timeRange.map((time) => {
         return state.startTime + time * 3600000;
       });
-      
+
       /** Populate timeColumn array, between time ranges, with interval blockSize */
       let blockedTimeColumn = [];
       blockedTimeColumn.push(timeRangeToMs[0]);
@@ -52,6 +53,12 @@ const table_reducer = (state, action) => {
       return {
         ...state,
         dayOrder: newDayOrder,
+      };
+
+    case ADD_TASK:
+      return {
+        ...state,
+        tasks: [...state.tasks, action.payload],
       };
     default:
       return state;

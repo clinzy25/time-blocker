@@ -6,12 +6,14 @@ import {
   GET_TIMES,
   SHIFT_DAYS,
   SET_TIME_RANGE,
+  ADD_TASK,
 } from '../reducers-contexts/actions';
 
 const TableContext = React.createContext();
 
 const initialState = {
   timeColumn: [],
+  tasks: [],
   // displays 12:00am of every day
   startTime: new Date(moment().format('LL')).getTime(),
   // displays 11:59pm of every day
@@ -55,13 +57,24 @@ const TableProvider = ({ children }) => {
     });
   };
 
+  const addTask = (task) => {
+    dispatch({ type: ADD_TASK, payload: task });
+  };
+
   useEffect(() => {
     getTimes();
   }, [state.blockSize, state.timeRange]);
 
   return (
     <TableContext.Provider
-      value={{ ...state, getTimes, setBlockSize, shiftDays, setTimeRange }}
+      value={{
+        ...state,
+        getTimes,
+        setBlockSize,
+        shiftDays,
+        setTimeRange,
+        addTask,
+      }}
     >
       {children}
     </TableContext.Provider>

@@ -1,22 +1,61 @@
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
 import { FaPlusSquare } from 'react-icons/fa';
+import { Task } from './Task';
 
 export const DayColumn = ({ day }) => {
-  const { timeColumn } = useTableContext();
+  const { timeColumn, addTask, tasks } = useTableContext();
 
+  const [showBtn, setShowBtn] = useState(false);
+  const [btnKey, setBtnKey] = useState(null);
+
+  const getTasks = (cellKey) => {
+    return tasks
+    ? tasks.map((task) => {
+      if (task.key === cellKey) {
+        return <Task cellKey={cellKey} />;
+      }
+    })
+    : null;
+  };
+    
   return (
     <Wrapper gridInterval={timeColumn.length}>
       <h2>{day}</h2>
       {timeColumn.map((_, index) => {
         index++;
+        console.log(index)
+        const cellKey = day.substr(0, 2).concat(index);
         return (
           <div
-            key={index}
+            key={cellKey}
             className='task-slot'
             style={{ gridArea: `${2} / 1 / ${index + 2} / 2;` }}
+            onMouseEnter={() => {
+              setBtnKey(index);
+              setShowBtn(true);
+            }}
+            onMouseLeave={() => {
+              setBtnKey(null);
+              setShowBtn(false);
+            }}
           >
-            <FaPlusSquare className='add-task-btn' />
+            {showBtn && index === btnKey ? (
+              <FaPlusSquare
+                className='add-task-btn'
+                onClick={() => {
+                  addTask({
+                    key: cellKey,
+                    dayOfWeek: day,
+                    time: '',
+                    title: 'New Task',
+                    textContent: '',
+                  });
+                }}
+              />
+            ) : null}
+            {getTasks(cellKey)}
           </div>
         );
       })}
@@ -29,7 +68,6 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: ${(props) => `100px repeat(${props.gridInterval}, 1fr);`};
-  grid-gap: 3px;
   background-color: var(--clr-background-dark3);
   border-radius: 7px;
   h2 {
@@ -44,13 +82,14 @@ const Wrapper = styled.div`
   .task-slot {
     height: 100%;
     width: 100%;
-    border-bottom: 2px solid var(--clr-background-dark2);
+    border-bottom: 5px solid var(--clr-background-dark2);
   }
   .add-task-btn {
     height: 20px;
     width: 20px;
     margin: 5px;
     color: var(--clr-background-dark);
-    display: none;
+    display: hidden;
+    cursor: pointer;
   }
 `;

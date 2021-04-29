@@ -22,6 +22,5 @@ const Wrapper = styled.article`
   margin-bottom: 200px;
   .flex-container {
     display: flex;
-    flex-flow: row;
   }
 `;
