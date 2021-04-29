@@ -14,10 +14,10 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   height: 75px;
-  background-color: #353535;
-  color: whitesmoke;
+  background-color: var(--clr-background-dark2);
+  color: var(--clr-text-light);
   hr {
     width: 40%;
-    border: 1px solid #252525;
+    border: 1px solid var(--clr-background-dark);
   }
 `;

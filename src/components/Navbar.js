@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 70px;
-  color: whitesmoke;
+  color: var(--clr-text-light);
   font-family: 'Montserrat', sans-serif;
   letter-spacing: 3px;
   .title {

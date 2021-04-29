@@ -1,14 +1,23 @@
 import styled from 'styled-components';
+import { useTableContext } from '../reducers-contexts/table_context';
+import { DayColumn } from './DayColumn';
 
 export const TasksContainer = () => {
+  const { dayOrder } = useTableContext();
+
   return (
     <Wrapper>
-      <h2>TasksContainer</h2>
+      {dayOrder.map((day, index) => {
+        return <DayColumn day={day} key={index} />;
+      })}
     </Wrapper>
   );
 };
 
 const Wrapper = styled.section`
   width: 100%;
-  height: 100%;
+  padding: 8px 8px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 8px;
 `;
