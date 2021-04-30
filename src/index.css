@@ -3,8 +3,9 @@
 :root {
   --clr-background-dark: #252525;
   --clr-background-dark2: #353535;
-  --clr-text-light: whitesmoke;
-  --clr-background-dark3: #5a5a5a00;
+  --clr-background-dark3: #5a5a5a;
+  --clr-text-light: #f5f5f5;
+  --clr-accent: #3F51B5
 }
 
 body {

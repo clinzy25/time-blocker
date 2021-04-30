@@ -3,10 +3,10 @@ import { useTableContext } from '../reducers-contexts/table_context';
 import moment from 'moment';
 
 export const TimeColumn = () => {
-  const { timeColumn } = useTableContext();
+  const { timeColumn, blockSize } = useTableContext();
 
   return (
-    <Wrapper>
+    <Wrapper blockSize={blockSize}>
       {timeColumn.map((time, index) => {
         return (
           <p key={index} className='time'>
@@ -24,8 +24,8 @@ const Wrapper = styled.div`
   flex-flow: column;
   align-items: flex-end;
   .time {
-    margin: 50px 15px;
+    margin: ${(props) => `${props.blockSize}px 15px;`};
     color: var(--clr-text-light);
+    letter-spacing: 2px;
   }
 `;
-

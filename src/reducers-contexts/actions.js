@@ -1,3 +1,4 @@
+export const SET_BLOCK_INTERVAL = 'SET_BLOCK_INTERVAL';
 export const SET_BLOCK_SIZE = 'SET_BLOCK_SIZE';
 export const GET_TIMES = 'GET_TIMES';
 export const SHIFT_DAYS = 'SHIFT_DAYS';

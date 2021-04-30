@@ -4,7 +4,7 @@ export const Footer = () => {
   return (
     <Wrapper>
       <hr />
-      <h2>Logo</h2>
+      <img src='../assets/CL-logo.png' alt='Conner Linzy' />
       <hr />
     </Wrapper>
   );

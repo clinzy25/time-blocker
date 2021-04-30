@@ -3,14 +3,14 @@ import { useTableContext } from '../reducers-contexts/table_context';
 import { DayColumn } from './DayColumn';
 
 export const TasksContainer = () => {
-  const { dayOrder } = useTableContext();
-
+  const { dayColumns } = useTableContext();
+  
   return (
-    <Wrapper>
-      {dayOrder.map((day, index) => {
-        return <DayColumn key={day} day={day} />;
-      })}
-    </Wrapper>
+      <Wrapper>
+        {Object.values(dayColumns).map((day) => {
+          return <DayColumn key={day} day={day.id} />;
+        })}
+      </Wrapper>
   );
 };
 
