@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, } from 'react';
 import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
 import { FaPlusSquare } from 'react-icons/fa';
