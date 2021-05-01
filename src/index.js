@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css'
+import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { TableProvider } from './reducers-contexts/table_context';
+import { TaskProvider } from './reducers-contexts/task_context';
 
 ReactDOM.render(
   <React.StrictMode>
     <TableProvider>
-      <App />
+      <TaskProvider>
+        <App />
+      </TaskProvider>
     </TableProvider>
   </React.StrictMode>,
   document.getElementById('root')

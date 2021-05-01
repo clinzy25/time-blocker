@@ -18,7 +18,6 @@ export const DayColumn = ({ day }) => {
   const [btnKey, setBtnKey] = useState(null);
   const [isAtTop, setIsAtTop] = useState(false);
 
-
   useEffect(() => {
     document.addEventListener('scroll', (e) => {
       let scrolled = document.scrollingElement.scrollTop;
@@ -91,6 +90,7 @@ const Wrapper = styled.div`
   grid-template-columns: 1fr;
   grid-template-rows: ${(props) => `100px repeat(${props.gridInterval}, 1fr);`};
   border-radius: 5px;
+  min-width: 180px;
   :hover {
     border-left: 2px dotted var(--clr-background-dark);
   }

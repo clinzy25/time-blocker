@@ -8,6 +8,7 @@ import {
   SET_TIME_RANGE,
   ADD_TASK,
   SET_BLOCK_SIZE,
+  SET_TASK_D
 } from '../reducers-contexts/actions';
 
 const TableContext = React.createContext();
@@ -102,14 +103,8 @@ const TableProvider = ({ children }) => {
   };
 
   const resizeTask = (initialBlockSize) => {
-    return (initialBlockSize / state.blockInterval) * 100;
+    return (initialBlockSize / state.blockInterval) * 94;
   };
-
-  const keepTaskWithStartTime = () => {};
-
-  useEffect(() => {
-    keepTaskWithStartTime();
-  }, [state.blockInterval, state.timeRange]);
 
   useEffect(() => {
     resizeTask();

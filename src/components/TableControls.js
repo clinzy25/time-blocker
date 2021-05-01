@@ -101,10 +101,12 @@ const Wrapper = styled.section`
     align-items: center;
     margin-left: 20px;
   }
-  .block-interval-container, .block-size-container {
+  .block-interval-container,
+  .block-size-container {
     margin: 0 40px;
   }
-  .block-interval-input, .block-size-input {
+  .block-interval-input,
+  .block-size-input {
     width: 250px;
   }
   .time-range-input {
