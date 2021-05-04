@@ -4,7 +4,6 @@
 
 1. Button hover effect re-renders entire table. Possible fix: https://www.npmjs.com/package/react-grid-area
 2. Possible issue with task text, might show when I try to persist data
-3. Adding multiple tasks to the same slot in quick succession
 
 ## Todo:
 
@@ -21,3 +20,4 @@
 1. User can customize colors of cells and columns
 2. Add current date to date column
 3. App is already aware of current time, add faded affect for past time blocks and days, highlight current.
+4. Google calandar import

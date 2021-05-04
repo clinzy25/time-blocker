@@ -4,32 +4,31 @@ import { FaWindowClose } from 'react-icons/fa';
 
 export const Task = ({ task }) => {
   const { resizeTask, setTaskText, deleteTask } = useTableContext();
-  
+  const { initalBlockSize, key, dayOfWeek, title, description } = task;
+
   return (
-    <Wrapper taskHeight={resizeTask(task.initalBlockSize)}>
+    <Wrapper taskHeight={resizeTask(initalBlockSize)}>
       <div className='input-container'>
         <FaWindowClose
           className='close-btn'
-          onClick={() => deleteTask(task.key, task.dayOfWeek)}
+          onClick={() => deleteTask(key, dayOfWeek)}
         />
         <input
           className='task-title'
           type='text'
           placeholder='Type a name...'
-          defaultValue={task.title}
+          defaultValue={title}
           focus
-          onChange={(e) =>
-            setTaskText('title', e.target.value, task.key, task.dayOfWeek)
-          }
+          onChange={(e) => setTaskText('title', e.target.value, key, dayOfWeek)}
         />
       </div>
       <textarea
         placeholder='description...'
         type='text'
         className='description'
-        defaultValue={task.description}
+        defaultValue={description}
         onChange={(e) =>
-          setTaskText('description', e.target.value, task.key, task.dayOfWeek)
+          setTaskText('description', e.target.value, key, dayOfWeek)
         }
       />
     </Wrapper>
@@ -46,7 +45,6 @@ const Wrapper = styled.div`
   border-radius: 5px;
   border: 2px solid var(--clr-background-dark3);
   z-index: 1;
-
   .task-title {
     height: 40px;
     border: 0;
@@ -57,7 +55,7 @@ const Wrapper = styled.div`
   }
   .close-btn {
     height: 25px;
-    width: 25px; 
+    width: 25px;
     order: 2;
     margin: 4px 5px 0 0;
     color: var(--clr-background-dark3);

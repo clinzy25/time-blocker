@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
 import { FaPlusSquare } from 'react-icons/fa';
 import { Task } from './Task';
 import { useWindowSize } from '@react-hook/window-size/throttled';
+import useScrollPosition from '@react-hook/window-scroll';
 
 export const DayColumn = ({ day, date }) => {
   const {
@@ -18,25 +19,17 @@ export const DayColumn = ({ day, date }) => {
   const [isAtTop, setIsAtTop] = useState(false);
 
   const [width, height] = useWindowSize({ fps: 60 });
+  const scrollY = useScrollPosition(60 /*fps*/);
 
-  useEffect(() => {
-    document.addEventListener('scroll', (e) => {
-      let scrolled = document.scrollingElement.scrollTop;
-      if (scrolled > 250) {
-        setIsAtTop(true);
-      } else {
-        setIsAtTop(false);
-      }
-    });
-  }, []);
-
+  const grid = {
+    gridArea: '5 / 5 / 6 / 6',
+  }
+  
   return (
     <Wrapper gridInterval={timeColumn.length}>
-      <div className='header-container'>
+      <div className={`header-container ${scrollY > 300 ? 'sticky' : ''}`}>
         <div>
-          <h2 className={`${isAtTop ? 'sticky' : ''}`}>
-            {width < 1400 ? day[0] : day}
-          </h2>
+          <h2>{width < 1400 ? day[0] : day}</h2>
           <h5 className='date'>{date}</h5>
         </div>
       </div>
@@ -77,7 +70,9 @@ export const DayColumn = ({ day, date }) => {
               if (col.id === day) {
                 return col.tasks.map((task) => {
                   if (task.key === cellKey) {
-                    return <Task task={task} />;
+                    return (
+                      <Task grid={grid} task={task} />
+                    );
                   } else return null;
                 });
               } else return null;
@@ -142,12 +137,10 @@ const Wrapper = styled.div`
   }
   .sticky {
     position: sticky;
-    text-align: center;
     top: 0;
     z-index: 2;
     background-color: var(--clr-background-dark2);
     border-bottom: 2px dotted var(--clr-background-dark);
-    padding-bottom: 90px;
     width: 100%;
   }
   @media only screen and (min-width: 1550px) {

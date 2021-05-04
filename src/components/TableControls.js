@@ -68,7 +68,7 @@ export const TableControls = () => {
           />
         </div>
         <div className='time-range-container'>
-          <Typography className='slider-label' id='range-slider' gutterBottom>
+          <Typography className='slider-label time-range-label' id='range-slider' gutterBottom>
             <span>Time Range</span>
           </Typography>
           <Slider
@@ -81,7 +81,7 @@ export const TableControls = () => {
             aria-labelledby='range-slider'
           />
           <Typography
-            className='time-range-label-container'
+            className='time-range-small-label-container'
             id='range-slider'
             align='left'
           >
@@ -137,7 +137,7 @@ const Wrapper = styled.section`
     width: 250px;
     padding-bottom: 0px;
   }
-  .time-range-label-container {
+  .time-range-small-label-container {
     display: flex;
     justify-content: space-between;
   }
@@ -155,12 +155,17 @@ const Wrapper = styled.section`
     font-family: 'Montserrat', sans-serif;
     margin: 0 40px;
   }
+  .time-range-label {
+    margin: 0;
+  }
+  .time-range-input {
+    padding: 0 0 5px 0;
+  }
   .clear-table-container {
     width: 200px;
     display: flex;
-    flex-flow: wrap;
     align-items: center;
-    margin-right: 35px;
+    margin-right: 20px;
   }
   .clear-table-icon {
     color: #690000;
