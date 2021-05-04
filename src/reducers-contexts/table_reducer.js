@@ -5,6 +5,8 @@ import {
   SET_TIME_RANGE,
   ADD_TASK,
   SET_BLOCK_SIZE,
+  CLEAR_TABLE,
+  DELETE_TASK,
 } from './actions';
 
 const table_reducer = (state, action) => {
@@ -20,12 +22,12 @@ const table_reducer = (state, action) => {
         ...state,
         timeRange: action.payload,
       };
-      
+
     case SET_BLOCK_SIZE:
       return {
         ...state,
-        blockSize: action.payload
-      }
+        blockSize: action.payload,
+      };
 
     case GET_TIMES:
       /** Divide block size by minutes in a day */
@@ -52,29 +54,54 @@ const table_reducer = (state, action) => {
         timeColumn: blockedTimeColumn,
       };
 
-    // case SHIFT_DAYS:
-    //   let newDayOrder = [
-    //     state.dayColumns[state.dayColumns.length - 1],
-    //     ...state.dayColumns.slice(0, state.dayColumns.length - 1),
-    //   ];
-    //   return {
-    //     ...state,
-    //     dayColumns: newDayOrder,
-    //   };
+    case SHIFT_DAYS:
+      let newDayOrder = [
+        state.dayColumns[state.dayColumns.length - 1],
+        ...state.dayColumns.slice(0, state.dayColumns.length - 1),
+      ];
+      return {
+        ...state,
+        dayColumns: newDayOrder,
+      };
 
     case ADD_TASK:
-      const newDayColumns = { ...state.dayColumns };
-      for (let i in newDayColumns) {
-        if (newDayColumns[i].id === action.payload.dayOfWeek) {
-          const newTaskIds = [...newDayColumns[i].tasks, action.payload];
-          newDayColumns[i].tasks = newTaskIds;
+      const newDayColumns = [...state.dayColumns];
+      newDayColumns.find((day) => {
+        if (day.id === action.payload.dayOfWeek) {
+          const newTasks = [...day.tasks, action.payload];
+          day.tasks = newTasks;
         }
-      }
+      });
       return {
         ...state,
         dayColumns: newDayColumns,
       };
-      
+
+    case DELETE_TASK: {
+      const { cellKey, day } = action.payload;
+      const filteredDayColumns = [...state.dayColumns];
+      filteredDayColumns.find((col) => {
+        if (col.id === day) {
+          const newTasks = col.tasks.filter((task) => task.key !== cellKey);
+          col.tasks = newTasks;
+        }
+      });
+      return {
+        ...state,
+        dayColumns: filteredDayColumns,
+      };
+    }
+
+    case CLEAR_TABLE:
+      const clearedDayColumns = [...state.dayColumns];
+      clearedDayColumns.map((col) => {
+        col.tasks = [];
+      });
+      return {
+        ...state,
+        dayColumns: clearedDayColumns,
+      };
+
     default:
       return state;
   }

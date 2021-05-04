@@ -23,7 +23,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-flow: column;
   align-items: flex-end;
+  padding-top: 100px;
+  width: 125px;
   min-width: 125px;
+  border-right: 3px solid var(--clr-background-dark);
   .time {
     margin: ${(props) => `${props.blockSize}px 15px;`};
     color: var(--clr-text-light);

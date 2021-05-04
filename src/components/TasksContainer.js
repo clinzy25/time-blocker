@@ -1,15 +1,20 @@
 import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
 import { DayColumn } from './DayColumn';
+import moment from 'moment';
 
 export const TasksContainer = () => {
-  const { dayColumns } = useTableContext();
+  const { dayColumns, startTime } = useTableContext();
 
   return (
     <Wrapper>
-      {Object.values(dayColumns).map((day) => {
-        return <DayColumn key={day} day={day.id} />;
-      })}
+      {dayColumns.map((day, index) => (
+        <DayColumn
+          date={moment(startTime + ((index + 1) * 86400000 - 1)).format('l')}
+          key={index - 1}
+          day={day.id}
+        />
+      ))}
     </Wrapper>
   );
 };

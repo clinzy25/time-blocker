@@ -1,10 +1,11 @@
 import styled from 'styled-components';
+import logo from '../images/CL-logo.png'
 
 export const Footer = () => {
   return (
     <Wrapper>
       <hr />
-      <img src='../assets/CL-logo.png' alt='Conner Linzy' />
+      <img src={logo} alt='Conner Linzy' />
       <hr />
     </Wrapper>
   );
@@ -19,5 +20,9 @@ const Wrapper = styled.div`
   hr {
     width: 40%;
     border: 1px solid var(--clr-background-dark);
+  }
+  img {
+    height: 80px;
+    width: 80px;
   }
 `;

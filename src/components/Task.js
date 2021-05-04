@@ -1,42 +1,40 @@
 import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
-import { useTaskContext } from '../reducers-contexts/task_context';
+import { FaWindowClose } from 'react-icons/fa';
 
 export const Task = ({ task }) => {
-  const { resizeTask } = useTableContext();
-  const {
-    setTaskTitle,
-    setTaskDescription,
-    title,
-    description,
-  } = useTaskContext();
+  const { resizeTask, setTaskText, deleteTask } = useTableContext();
   
   return (
     <Wrapper taskHeight={resizeTask(task.initalBlockSize)}>
-      <input
-        className='task-title'
-        type='text'
-        placeholder='Type a name...'
-        value={title}
-        focus
-        onChange={(e) => setTaskTitle(e.target.value, task.cellKey, task.day)}
-      />
+      <div className='input-container'>
+        <FaWindowClose
+          className='close-btn'
+          onClick={() => deleteTask(task.key, task.dayOfWeek)}
+        />
+        <input
+          className='task-title'
+          type='text'
+          placeholder='Type a name...'
+          defaultValue={task.title}
+          focus
+          onChange={(e) =>
+            setTaskText('title', e.target.value, task.key, task.dayOfWeek)
+          }
+        />
+      </div>
       <textarea
         placeholder='description...'
         type='text'
         className='description'
-        value={description}
+        defaultValue={task.description}
         onChange={(e) =>
-          setTaskDescription(e.target.value, task.cellKey, task.day)
+          setTaskText('description', e.target.value, task.key, task.dayOfWeek)
         }
       />
     </Wrapper>
   );
 };
-
-// https://github.com/atlassian/react-beautiful-dnd
-
-// https://www.npmjs.com/package/re-resizable#live-demo
 
 const Wrapper = styled.div`
   display: flex;
@@ -54,6 +52,18 @@ const Wrapper = styled.div`
     border: 0;
     font-size: 1.3rem;
   }
+  .input-container {
+    display: flex;
+  }
+  .close-btn {
+    height: 25px;
+    width: 25px; 
+    order: 2;
+    margin: 4px 5px 0 0;
+    color: var(--clr-background-dark3);
+    cursor: pointer;
+  }
+
   .task-title,
   .description {
     width: 90%;
@@ -70,3 +80,7 @@ const Wrapper = styled.div`
     border: none;
   }
 `;
+
+// https://github.com/atlassian/react-beautiful-dnd
+
+// https://www.npmjs.com/package/re-resizable#live-demo
