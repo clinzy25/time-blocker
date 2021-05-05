@@ -30,9 +30,9 @@ const Wrapper = styled.div`
   .time {
     height: ${(props) => `${props.blockSize}px;`};
     color: var(--clr-text-light);
-    font-family:'Roboto Mono', monospace;
+    font-family: 'Roboto Mono', monospace;
     letter-spacing: 2px;
-    margin: 0;
+    margin: 0 5px 0 0;
     position: relative;
     top: -10px;
   }

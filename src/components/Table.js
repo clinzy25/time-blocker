@@ -23,6 +23,8 @@ const Wrapper = styled.article`
   background-color: var(--clr-background-dark2);
   border-radius: 7px;
   margin-bottom: 200px;
+  box-shadow: 5px 5px 10px black;
+
   .flex-container {
     display: flex;
   }

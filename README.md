@@ -7,22 +7,23 @@
 3. Resizing tasks should change the start / end time of the task
 4. Task text only pushes to local storage after another task is added, need to trigger the re-render on submit.
 5. Hovering over cell with expanded task should not show add task btn
+6. Most inputs need debouncing
 
 ## Todo:
 
 1. Refactor all
-1. Responsive tweaks
-2. Resize
-3. Drag and drop
-4. Faded affect for past time blocks and days, highlight current.
+2. Responsive tweaks
+3. Resize
+4. Drag and drop
 5. Accessibility controls
 
 ## Lesser todo:
 
 1. User can customize colors of cells and columns
-3. Task Search
-4. Task tagging
+2. Task Search
+3. Task tagging
 
 ### Beyond
+
 1. Google calandar import
 2. Task complete btn, store times and view metrics, user can see how long a task normally takse them

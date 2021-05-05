@@ -62,6 +62,7 @@ const Wrapper = styled.div`
     width: 800px;
     background-color: var(--clr-background-dark);
     border-radius: 10px;
+    border: 2px solid var(--clr-background-dark3);
   }
   .title-container {
     display: flex;

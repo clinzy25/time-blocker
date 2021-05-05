@@ -4,14 +4,35 @@ import { DayColumn } from './DayColumn';
 import moment from 'moment';
 
 export const TasksContainer = () => {
-  const { dayColumns, startTime } = useTableContext();
+  const { dayColumns, startTime, currentTime } = useTableContext();
+  const daysOfWeek = [
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+  ];
+  const currentDayIndex =
+    daysOfWeek.indexOf(moment(currentTime).format('dddd').toLowerCase()) + 1;
+
+  const getDatesFromCurrentTime = (dayIndex, dayName) => {
+    if (dayIndex === currentDayIndex) {
+      return moment(startTime).format('l');
+    }
+    // subtract a number of days in milliseconds from the current day
+    return moment(
+      startTime - (currentDayIndex - daysOfWeek.indexOf(dayName) - 1) * 86400000
+    ).format('l');
+  };
 
   return (
     <Wrapper>
       {dayColumns.map((day, index) => (
         <DayColumn
-          date={moment(startTime + ((index + 1) * 86400000 - 1)).format('l')}
-          key={index - 1}
+          date={getDatesFromCurrentTime(index + 1, day.id)}
+          key={index}
           day={day.id}
         />
       ))}

@@ -54,7 +54,7 @@ const getLocalStorage = (item) => {
   if (item === 'table_settings') {
     return table_settings
       ? JSON.parse(table_settings)
-      : [30, 200, [9, 17]];
+      : [30, 200, [9, 17], 'TASKS'];
   }
 };
 
@@ -65,10 +65,12 @@ const initialState = {
   endTime: new Date().setTime(
     new Date(moment().format('LL')).getTime() + 86399000
   ),
+  currentTime: new Date().getTime(),
   timeColumn: [],
   blockInterval: getLocalStorage('table_settings')[0],
   blockSize: getLocalStorage('table_settings')[1],
   timeRange: getLocalStorage('table_settings')[2],
+  tableTitle: getLocalStorage('table_settings')[3],
   loading: false,
   isWarningModalOpen: false,
   dayColumns: getLocalStorage('tasks'),
@@ -77,6 +79,10 @@ const initialState = {
 const TableProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [warningModal, setWarningModal] = useState(false);
+
+  const setTableTitle = (newTableTitle) => {
+    state.tableTitle = newTableTitle;
+  };
 
   const getTimes = () => {
     dispatch({ type: GET_TIMES });
@@ -90,6 +96,7 @@ const TableProvider = ({ children }) => {
   };
 
   const shiftDays = () => {
+    console.log(moment(state.currentTime).format('dddd'))
     dispatch({ type: SHIFT_DAYS });
   };
 
@@ -140,14 +147,21 @@ const TableProvider = ({ children }) => {
   const deleteTask = (cellKey, day) => {
     dispatch({ type: DELETE_TASK, payload: { cellKey, day } });
   };
-  
+
+  useEffect(() => {
+    setInterval(() => {
+      const newCurrentTime = new Date().getTime();
+      state.currentTime = newCurrentTime;
+    }, 60000);
+  }, [state.currentTime]);
+
   useEffect(() => {
     getTimes();
   }, [state.blockInterval, state.timeRange]);
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(state.dayColumns));
-  }, [state.dayColumns, setTaskText]);
+  }, [state.dayColumns]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -156,10 +170,10 @@ const TableProvider = ({ children }) => {
         state.blockInterval,
         state.blockSize,
         state.timeRange,
-        state.isLoggedIn,
+        state.tableTitle,
       ])
     );
-  }, [state.blockInterval, state.blockSize, state.timeRange]);
+  }, [state.blockInterval, state.blockSize, state.timeRange, state.tableTitle]);
 
   return (
     <TableContext.Provider
@@ -177,6 +191,7 @@ const TableProvider = ({ children }) => {
         warningModal,
         setWarningModal,
         deleteTask,
+        setTableTitle,
       }}
     >
       {children}

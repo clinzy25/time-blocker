@@ -1,10 +1,18 @@
 import styled from 'styled-components';
+import { useTableContext } from '../reducers-contexts/table_context';
 import { Table } from './Table';
 
 export const TableContainer = () => {
+  const { tableTitle, setTableTitle } = useTableContext();
+
   return (
     <Wrapper>
-      <input className='title' type='text' placeholder='TASKS' />
+      <input
+        className='title'
+        type='text'
+        defaultValue={tableTitle}
+        onChange={(e) => setTableTitle(e.target.value)}
+      />
       <Table />
     </Wrapper>
   );
@@ -25,6 +33,7 @@ const Wrapper = styled.main`
     font-size: 3rem;
     color: var(--clr-text-light);
     letter-spacing: 8px;
+    text-shadow: 4px 4px 6px black;
     ::placeholder {
       color: var(--clr-text-light);
     }

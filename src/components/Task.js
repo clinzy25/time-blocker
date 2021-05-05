@@ -4,24 +4,43 @@ import { useTableContext } from '../reducers-contexts/table_context';
 import { FaWindowClose } from 'react-icons/fa';
 import { GiResize } from 'react-icons/gi';
 import moment from 'moment';
+import { MdDragHandle } from 'react-icons/md';
+import Draggable, { DraggableCore } from 'react-draggable';
 
 export const Task = ({ task }) => {
   const {
     setTaskText,
     deleteTask,
     blockInterval,
+    currentTime,
   } = useTableContext();
-  const { initalBlockSize, key, dayOfWeek, title, description} = task;
+  const {
+    initalBlockSize,
+    key,
+    dayOfWeek,
+    title,
+    description,
+    timeStart,
+    timeEnd,
+    date,
+  } = task;
 
   const resizeTask = (reset) => {
     if (reset === 'reset') {
       task.initalBlockSize = blockInterval;
       // task.timeEnd = // need to add
       return 100;
-    }
-    else return (initalBlockSize / blockInterval) * 97;
-  }
-  
+    } else return (initalBlockSize / blockInterval) * 97;
+  };
+
+  const isCurrentTask = (props) => {
+    return (
+      props.timeStart <= props.currentTime &&
+      props.timeEnd >= props.currentTime &&
+      props.date === moment(props.currentTime).format('l')
+    );
+  };
+
   const [taskHeight, setTaskHeight] = useState(resizeTask());
 
   useEffect(() => {
@@ -29,8 +48,14 @@ export const Task = ({ task }) => {
   }, [blockInterval]);
 
   return (
-    <Wrapper taskHeight={taskHeight}>
-      <div className='placeholder' />
+    <Wrapper
+      timeStart={timeStart}
+      timeEnd={timeEnd}
+      isCurrentTask={isCurrentTask}
+      currentTime={currentTime}
+      taskHeight={taskHeight}
+      date={date}
+    >
       <div className='input-container'>
         <div className='button-container'>
           <FaWindowClose
@@ -40,7 +65,7 @@ export const Task = ({ task }) => {
           />
           <GiResize
             className='close-btn'
-            title='Expand to fill cell'
+            title='Expand / shrink to fill cell'
             onClick={() => setTaskHeight(resizeTask('reset'))}
           />
         </div>
@@ -57,7 +82,7 @@ export const Task = ({ task }) => {
         {moment(task.timeStart).format('LT')} -&nbsp;
         {moment(task.timeEnd).format('LT')}
       </span>
-      {resizeTask(initalBlockSize) > 40 && (
+      {taskHeight > 60 && (
         <textarea
           placeholder='description...'
           type='text'
@@ -68,6 +93,8 @@ export const Task = ({ task }) => {
           }
         />
       )}
+      {/* <MdDragHandle className='drag-handle' /> */}
+      {/* https://github.com/react-grid-layout/react-draggable/blob/master/example/example.js */}
     </Wrapper>
   );
 };
@@ -79,8 +106,14 @@ const Wrapper = styled.div`
   background-color: var(--clr-background-dark);
   height: ${(props) => `${props.taskHeight}%`};
   border-radius: 5px;
-  border: 2px solid var(--clr-background-dark3);
   z-index: 1;
+  box-shadow: 2px 2px 7px black;
+  border: ${(props) =>
+    props.isCurrentTask(props)
+      ? '3px solid var(--clr-accent)'
+      : '2px solid var(--clr-background-dark3)'};
+  filter: ${(props) =>
+    props.isCurrentTask(props) ? 'brightness(150%)' : null};
   .time-range {
     color: var(--clr-text-light);
     font-family: 'Roboto Mono', monospace;
@@ -104,6 +137,15 @@ const Wrapper = styled.div`
     order: 2;
     color: var(--clr-background-dark3);
     cursor: pointer;
+    :hover {
+      filter: brightness(120%);
+    }
+  }
+  .checkbox {
+    color: blue;
+    ::after {
+      color: blue;
+    }
   }
   .button-container {
     order: 2;
@@ -137,5 +179,11 @@ const Wrapper = styled.div`
     color: #a4a4a4;
     letter-spacing: 2px;
     line-height: 130%;
+    margin-bottom: 20px;
+  }
+  .drag-handle {
+    height: 20px;
+    width: 20px;
+    cursor: s-resize;
   }
 `;

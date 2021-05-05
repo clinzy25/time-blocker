@@ -65,7 +65,6 @@ const table_reducer = (state, action) => {
       };
 
     case ADD_TASK:
-      console.log(action.payload.key);
       const newDayColumns = [...state.dayColumns];
       newDayColumns.find((day) => {
         if (day.id === action.payload.dayOfWeek) {

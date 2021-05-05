@@ -5,6 +5,7 @@ import { FaPlusSquare } from 'react-icons/fa';
 import { Task } from './Task';
 import { useWindowSize } from '@react-hook/window-size/throttled';
 import useScrollPosition from '@react-hook/window-scroll';
+import moment from 'moment';
 
 export const DayColumn = ({ day, date }) => {
   const {
@@ -12,6 +13,7 @@ export const DayColumn = ({ day, date }) => {
     addTask,
     blockInterval,
     dayColumns,
+    currentTime,
   } = useTableContext();
 
   const [btnKey, setBtnKey] = useState(null);
@@ -20,7 +22,11 @@ export const DayColumn = ({ day, date }) => {
   const scrollY = useScrollPosition(60 /*fps*/);
 
   return (
-    <Wrapper gridInterval={timeColumn.length}>
+    <Wrapper
+      date={date}
+      currentTime={currentTime}
+      gridInterval={timeColumn.length}
+    >
       <div className={`header-container ${scrollY > 300 ? 'sticky' : ''}`}>
         <div>
           <h2>{width < 1400 ? day[0] : day}</h2>
@@ -53,6 +59,7 @@ export const DayColumn = ({ day, date }) => {
                 addTask({
                   key: cellKey,
                   dayOfWeek: day,
+                  date: date,
                   cellNumber: index,
                   timeStart: cellTime,
                   timeEnd: cellTime + blockInterval * 60000,
@@ -93,6 +100,11 @@ const Wrapper = styled.div`
   border-radius: 5px;
   min-width: 100px;
   border-left: 2px dotted var(--clr-background-dark2);
+  z-index: 0;
+  background-color: ${(props) =>
+    props.date === moment(props.currentTime).format('l')
+      ? 'var(--clr-background-dark3)'
+      : null};
   :hover {
     border-left: 2px dotted var(--clr-background-dark);
   }

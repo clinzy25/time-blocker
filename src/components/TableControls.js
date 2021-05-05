@@ -126,6 +126,9 @@ const Wrapper = styled.section`
     color: var(--clr-accent);
     height: 40px;
     width: 40px;
+    :hover {
+      filter: brightness(120%);
+    }
   }
   .shift-days-container {
     display: flex;
@@ -177,5 +180,8 @@ const Wrapper = styled.section`
     height: 30px;
     width: 30px;
     cursor: pointer;
+    :hover {
+      filter: brightness(120%);
+    }
   }
 `;
