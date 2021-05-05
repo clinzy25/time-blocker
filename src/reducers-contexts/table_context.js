@@ -59,7 +59,7 @@ const getLocalStorage = (item) => {
 };
 
 const initialState = {
-  // displays 12:00am of every da
+  // displays 12:00am of every day
   startTime: new Date(moment().format('LL')).getTime(),
   // displays 11:59pm of every day
   endTime: new Date().setTime(
