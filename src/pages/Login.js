@@ -15,9 +15,9 @@ export const Login = () => {
         </h1>
         <span className='description'>
           A customizable, web-based alternative to the traditional{' '}
-          <Link className='link' to='https://todoist.com/productivity-methods/time-blocking'>
+          <a className='link' href='https://todoist.com/productivity-methods/time-blocking'>
             time-block planner
-          </Link>
+          </a>
         </span>
         <Button className='btn' variant='contained' onClick={loginWithRedirect}>
           Login / Sign Up
