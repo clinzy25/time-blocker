@@ -3,7 +3,7 @@ import { useTableContext } from '../reducers-contexts/table_context';
 import moment from 'moment';
 
 export const TimeColumn = () => {
-  const { timeColumn, blockSize } = useTableContext();
+  const { timeColumn, blockSize, taskHeight } = useTableContext();
 
   return (
     <Wrapper blockSize={blockSize}>
@@ -28,8 +28,14 @@ const Wrapper = styled.div`
   min-width: 125px;
   border-right: 3px solid var(--clr-background-dark);
   .time {
-    margin: ${(props) => `${props.blockSize}px 15px;`};
+    height: ${(props) => `${props.blockSize}px;`};
     color: var(--clr-text-light);
+    font-family:'Roboto Mono', monospace;
     letter-spacing: 2px;
+    margin: 0;
+    position: relative;
+    top: -10px;
   }
 `;
+
+    // margin: ${(props) => `${props.blockSize}px 15px;`};

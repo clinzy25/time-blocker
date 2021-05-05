@@ -16,15 +16,10 @@ export const DayColumn = ({ day, date }) => {
   } = useTableContext();
 
   const [btnKey, setBtnKey] = useState(null);
-  const [isAtTop, setIsAtTop] = useState(false);
 
-  const [width, height] = useWindowSize({ fps: 60 });
+  const [width] = useWindowSize({ fps: 60 });
   const scrollY = useScrollPosition(60 /*fps*/);
 
-  const grid = {
-    gridArea: '5 / 5 / 6 / 6',
-  }
-  
   return (
     <Wrapper gridInterval={timeColumn.length}>
       <div className={`header-container ${scrollY > 300 ? 'sticky' : ''}`}>
@@ -36,9 +31,11 @@ export const DayColumn = ({ day, date }) => {
       {timeColumn.map((_, index) => {
         index++;
         const cellKey = day.concat(index);
+        const cellTime = timeColumn[index] - blockInterval * 60000;
         return (
           <div
             key={cellKey}
+            time={cellTime}
             className='task-slot'
             style={{ gridArea: `2 / 1 / ${index + 2} / 2;` }}
             onMouseEnter={() => {
@@ -51,32 +48,37 @@ export const DayColumn = ({ day, date }) => {
             <FaPlusSquare
               className='add-task-btn'
               style={{
-                zIndex: `${cellKey === btnKey || width < 1400 ? '1' : '-1'}`,
+                opacity: `${cellKey === btnKey || width < 1400 ? '1' : '0'}`,
               }}
               onClick={() => {
                 addTask({
                   key: cellKey,
                   dayOfWeek: day,
                   cellNumber: index,
-                  timeStart: getTaskTimeRange('start', index),
-                  timeEnd: getTaskTimeRange('end', index),
+                  timeStart: cellTime,
+                  timeEnd: cellTime + blockInterval * 60000,
                   initalBlockSize: blockInterval,
                   title: '',
                   description: '',
                 });
               }}
             />
-            {dayColumns.map((col) => {
-              if (col.id === day) {
-                return col.tasks.map((task) => {
-                  if (task.key === cellKey) {
-                    return (
-                      <Task grid={grid} task={task} />
-                    );
-                  } else return null;
-                });
-              } else return null;
-            })}
+            {dayColumns.map(
+              (column) =>
+                column.id === day &&
+                column.tasks.map((task) => {
+                  if (task.timeStart === cellTime) {
+                    return <Task task={task} />;
+                  }
+                  if (
+                    task.timeStart > cellTime &&
+                    task.timeStart <
+                      timeColumn[index + 1] - blockInterval * 60000
+                  ) {
+                    return <Task task={task} />;
+                  }
+                })
+            )}
           </div>
         );
       })}
@@ -91,6 +93,7 @@ const Wrapper = styled.div`
   grid-template-rows: ${(props) => `100px repeat(${props.gridInterval}, 1fr);`};
   border-radius: 5px;
   min-width: 100px;
+    border-left: 2px dotted var(--clr-background-dark2);
   :hover {
     border-left: 2px dotted var(--clr-background-dark);
   }
@@ -116,10 +119,12 @@ const Wrapper = styled.div`
     margin: 0;
   }
   .task-slot {
-    display: flex;
+    /* display: flex;
     align-content: center;
+    flex-flow: column; */
     height: 100%;
     width: 100%;
+    z-index: 1;
     border-top: 2px dotted var(--clr-background-dark);
     :hover {
       background-color: rgba(0, 0, 0, 0.2);

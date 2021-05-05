@@ -61,14 +61,18 @@ export const TableControls = () => {
             aria-labelledby='discrete-slider-small-steps'
             defaultValue={blockSize}
             marks
-            min={50}
-            max={150}
+            min={100}
+            max={700}
             valueLabelDisplay='auto'
             onChange={(_, value) => setBlockSize(value)}
           />
         </div>
         <div className='time-range-container'>
-          <Typography className='slider-label time-range-label' id='range-slider' gutterBottom>
+          <Typography
+            className='slider-label time-range-label'
+            id='range-slider'
+            gutterBottom
+          >
             <span>Time Range</span>
           </Typography>
           <Slider

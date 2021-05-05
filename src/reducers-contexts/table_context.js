@@ -1,9 +1,4 @@
-import React, {
-  useReducer,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useReducer, useContext, useEffect, useState } from 'react';
 import reducer from './table_reducer';
 import moment from 'moment';
 import {
@@ -59,7 +54,7 @@ const getLocalStorage = (item) => {
   if (item === 'table_settings') {
     return table_settings
       ? JSON.parse(table_settings)
-      : [30, 50, [9, 17], false];
+      : [30, 200, [9, 17]];
   }
 };
 
@@ -76,7 +71,6 @@ const initialState = {
   timeRange: getLocalStorage('table_settings')[2],
   loading: false,
   isWarningModalOpen: false,
-  isLoggedIn: getLocalStorage('table_settings')[3],
   dayColumns: getLocalStorage('tasks'),
 };
 
@@ -95,10 +89,6 @@ const TableProvider = ({ children }) => {
     dispatch({ type: SET_BLOCK_SIZE, payload: newBlockSize });
   };
 
-  const resizeTask = (initialBlockSize) => {
-    return (initialBlockSize / state.blockInterval) * 94;
-  };
-
   const shiftDays = () => {
     dispatch({ type: SHIFT_DAYS });
   };
@@ -111,7 +101,6 @@ const TableProvider = ({ children }) => {
   };
 
   const addTask = (task) => {
-    console.log(state.dayColumns);
     dispatch({ type: ADD_TASK, payload: task });
   };
 
@@ -134,10 +123,6 @@ const TableProvider = ({ children }) => {
     return moment(result).format('LT');
   };
 
-  // const openWarningModal = (whatToDelete) => {
-  //   dispatch({ type: OPEN_WARNING_MODAL, payload: whatToDelete });
-  // };
-
   const setTaskText = (textType, newText, cellKey, day) => {
     return state.dayColumns.map((col) => {
       if (col.id === day) {
@@ -157,10 +142,6 @@ const TableProvider = ({ children }) => {
   };
   
   useEffect(() => {
-    resizeTask();
-  }, [state.blockInterval]);
-
-  useEffect(() => {
     getTimes();
   }, [state.blockInterval, state.timeRange]);
 
@@ -178,7 +159,7 @@ const TableProvider = ({ children }) => {
         state.isLoggedIn,
       ])
     );
-  }, [state.blockInterval, state.blockSize, state.timeRange, state.isLoggedIn]);
+  }, [state.blockInterval, state.blockSize, state.timeRange]);
 
   return (
     <TableContext.Provider
@@ -190,7 +171,6 @@ const TableProvider = ({ children }) => {
         setTimeRange,
         addTask,
         getTaskTimeRange,
-        resizeTask,
         setBlockSize,
         setTaskText,
         clearTable,
