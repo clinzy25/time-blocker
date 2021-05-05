@@ -2,7 +2,6 @@ import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import logo from '../images/CL-logo.png';
-import {Link} from 'react-router-dom'
 
 export const Login = () => {
   const { loginWithRedirect } = useAuth0();
