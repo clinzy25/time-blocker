@@ -81,12 +81,9 @@ const Wrapper = styled.div`
   border-radius: 5px;
   border: 2px solid var(--clr-background-dark3);
   z-index: 1;
-  /* position: relative;
- top: 50%; */
   .time-range {
     color: var(--clr-text-light);
     font-family: 'Roboto Mono', monospace;
-    /* letter-spacing: 1px; */
     align-self: flex-start;
     margin-left: 8px;
     margin-bottom: 3px;
@@ -105,7 +102,6 @@ const Wrapper = styled.div`
     height: 25px;
     width: 25px;
     order: 2;
-    /* margin: 4px 5px 0 0; */
     color: var(--clr-background-dark3);
     cursor: pointer;
   }

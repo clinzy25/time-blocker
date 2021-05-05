@@ -10,7 +10,6 @@ export const DayColumn = ({ day, date }) => {
   const {
     timeColumn,
     addTask,
-    getTaskTimeRange,
     blockInterval,
     dayColumns,
   } = useTableContext();
@@ -93,7 +92,7 @@ const Wrapper = styled.div`
   grid-template-rows: ${(props) => `100px repeat(${props.gridInterval}, 1fr);`};
   border-radius: 5px;
   min-width: 100px;
-    border-left: 2px dotted var(--clr-background-dark2);
+  border-left: 2px dotted var(--clr-background-dark2);
   :hover {
     border-left: 2px dotted var(--clr-background-dark);
   }
@@ -119,9 +118,6 @@ const Wrapper = styled.div`
     margin: 0;
   }
   .task-slot {
-    /* display: flex;
-    align-content: center;
-    flex-flow: column; */
     height: 100%;
     width: 100%;
     z-index: 1;
