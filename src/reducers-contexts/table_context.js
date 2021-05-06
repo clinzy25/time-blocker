@@ -67,10 +67,10 @@ const initialState = {
   ),
   currentTime: new Date().getTime(),
   timeColumn: [],
-  blockInterval: getLocalStorage('table_settings')[0],
-  blockSize: getLocalStorage('table_settings')[1],
-  timeRange: getLocalStorage('table_settings')[2],
-  tableTitle: getLocalStorage('table_settings')[3],
+  blockInterval: 30 && getLocalStorage('table_settings')[0],
+  blockSize: 200 && getLocalStorage('table_settings')[1],
+  timeRange: [9, 17] && getLocalStorage('table_settings')[2],
+  tableTitle: 'TASKS' && getLocalStorage('table_settings')[3],
   loading: false,
   isWarningModalOpen: false,
   dayColumns: getLocalStorage('tasks'),
@@ -96,7 +96,7 @@ const TableProvider = ({ children }) => {
   };
 
   const shiftDays = () => {
-    console.log(moment(state.currentTime).format('dddd'))
+    console.log(moment(state.currentTime).format('dddd'));
     dispatch({ type: SHIFT_DAYS });
   };
 
