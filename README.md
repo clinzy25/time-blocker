@@ -2,28 +2,31 @@
 
 ## Issues
 
-1. Limit blockSize lower limit to height of tasks in cell
-2. Upper padding of tasks that dont start at the start time of the block. Ie. a 930-1000 task in a 900-1000 cell should fill the SECOND 50% of the block.
-3. Resizing tasks should change the start / end time of the task
-4. Task text only pushes to local storage after another task is added, need to trigger the re-render on submit.
-5. Hovering over cell with expanded task should not show add task btn
-6. Most inputs need debouncing
+- Limit blockSize lower limit to height of tasks in cell
+- Upper padding of tasks that dont start at the start time of the block. Ie. a 930-1000 task in a 900-1000 cell should fill the SECOND 50% of the block.
+- Resizing tasks should change the start / end time of the task
+- Task text only pushes to local storage after another task is added, need to trigger the re-render on submit.
+- Hovering over cell with expanded task should not show add task btn
+- Most inputs need debouncing
+- Local storage defaults wrong
+- Shift days bug
 
 ## Todo:
 
-1. Refactor all
-2. Responsive tweaks
-3. Resize
-4. Drag and drop
-5. Accessibility controls
+- Refactor all
+- Responsive tweaks
+- Limit block intervals to 10, 20, 30, 60, 90, and 120 min.
+- Current time always on top button.
+- Resize
+- Drag and drop
+- Accessibility controls
 
 ## Lesser todo:
 
-1. User can customize colors of cells and columns
-2. Task Search
-3. Task tagging
+- User can customize colors of cells and columns
+- Task Search
+- Task tagging
 
 ### Beyond
 
-1. Google calandar import
-2. Task complete btn, store times and view metrics, user can see how long a task normally takse them
+- Google calandar import
