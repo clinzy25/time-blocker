@@ -17,58 +17,69 @@ import {
 
 const TableContext = React.createContext();
 
+const tasks = localStorage.getItem('tasks');
+const block_interval = localStorage.getItem('block_interval');
+const block_size = localStorage.getItem('block_size');
+const time_range = localStorage.getItem('time_range');
+const table_title = localStorage.getItem('table_title');
+const current_time_on_top = localStorage.getItem('current_time_on_top');
+
+/**
+ * Default values retured if they DNE in localStorage
+ * @default [dayColumns] - see below
+ * @default [block_interval] - 30
+ * @default [block_size] - 200
+ * @default [time_range] - [9,17]
+ * @default [table_title] - 'TASKS'
+ * @default [current_time_on_top] - false
+ */
 const getLocalStorage = (item) => {
-  let tasks = localStorage.getItem('tasks');
-  let table_settings = localStorage.getItem('table_settings');
-  if (item === 'tasks') {
-    /**
-     * Default values retured if tasks DNE in localStorage
-     * @default [dayColumns]
-     */
-    return tasks
-      ? JSON.parse(tasks)
-      : [
-          {
-            id: 'monday',
-            tasks: [],
-          },
-          {
-            id: 'tuesday',
-            tasks: [],
-          },
-          {
-            id: 'wednesday',
-            tasks: [],
-          },
-          {
-            id: 'thursday',
-            tasks: [],
-          },
-          {
-            id: 'friday',
-            tasks: [],
-          },
-          {
-            id: 'saturday',
-            tasks: [],
-          },
-          {
-            id: 'sunday',
-            tasks: [],
-          },
-        ];
-  }
-  if (item === 'table_settings') {
-    /**
-     * Default values for table controls stored in array
-     * @default [blockInterval]
-     * @default [blockSize]
-     * @default [timeRange]
-     * @default [tableTitle]
-     */
-    return table_settings
-      ? JSON.parse(table_settings)
-      : [30, 200, [9, 17], 'TASKS'];
+  switch (item) {
+    case 'tasks':
+      return tasks
+        ? JSON.parse(tasks)
+        : [
+            {
+              id: 'monday',
+              tasks: [],
+            },
+            {
+              id: 'tuesday',
+              tasks: [],
+            },
+            {
+              id: 'wednesday',
+              tasks: [],
+            },
+            {
+              id: 'thursday',
+              tasks: [],
+            },
+            {
+              id: 'friday',
+              tasks: [],
+            },
+            {
+              id: 'saturday',
+              tasks: [],
+            },
+            {
+              id: 'sunday',
+              tasks: [],
+            },
+          ];
+    case 'block_interval':
+      return block_interval ? JSON.parse(block_interval) : 30;
+    case 'block_size':
+      return block_size ? JSON.parse(block_size) : 200;
+    case 'time_range':
+      return time_range ? JSON.parse(time_range) : [9, 17];
+    case 'table_title':
+      return table_title ? JSON.parse(table_title) : 'TASKS';
+    case 'current_time_on_top':
+      return current_time_on_top ? JSON.parse(current_time_on_top) : false;
+    default:
+      return null;
   }
 };
 
@@ -81,13 +92,13 @@ const initialState = {
   ),
   currentTime: new Date().getTime(),
   timeColumn: [],
-  blockInterval: getLocalStorage('table_settings')[0],
-  blockSize: getLocalStorage('table_settings')[1],
-  timeRange: getLocalStorage('table_settings')[2],
-  tableTitle: getLocalStorage('table_settings')[3],
   isWarningModalOpen: false,
   dayColumns: getLocalStorage('tasks'),
-  currentTimeOnTop: false,
+  blockInterval: getLocalStorage('block_interval'),
+  blockSize: getLocalStorage('block_size'),
+  timeRange: getLocalStorage('time_range'),
+  tableTitle: getLocalStorage('table_title'),
+  currentTimeOnTop: getLocalStorage('current_time_on_top'),
 };
 
 const TableProvider = ({ children }) => {
@@ -197,7 +208,30 @@ const TableProvider = ({ children }) => {
         state.tableTitle,
       ])
     );
-  }, [state.blockInterval, state.blockSize, state.timeRange, state.tableTitle, state.dayColumns]);
+  }, [state.blockInterval, state.blockSize, state.timeRange, state.tableTitle]);
+
+  useEffect(() => {
+    localStorage.setItem('block_interval', JSON.stringify(state.blockInterval));
+  }, [state.blockInterval]);
+
+  useEffect(() => {
+    localStorage.setItem('block_size', JSON.stringify(state.blockSize));
+  }, [state.blockSize]);
+
+  useEffect(() => {
+    localStorage.setItem('time_range', JSON.stringify(state.timeRange));
+  }, [state.timeRange]);
+
+  useEffect(() => {
+    localStorage.setItem('table_title', JSON.stringify(state.tableTitle));
+  }, [state.tableTitle]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      'current_time_on_top',
+      JSON.stringify(state.currentTimeOnTop)
+    );
+  }, [state.currentTimeOnTop]);
 
   return (
     <TableContext.Provider

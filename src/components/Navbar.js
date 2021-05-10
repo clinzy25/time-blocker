@@ -50,6 +50,7 @@ const Wrapper = styled.div`
     color: var(--clr-text-light);
     text-decoration: none;
     text-shadow: 2px 2px 5px #121212;
+    cursor: pointer;
     :hover {
       color: #5e6fc7;
     }
