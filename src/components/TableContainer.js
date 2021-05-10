@@ -23,19 +23,16 @@ const Wrapper = styled.main`
   flex-flow: column;
   align-items: center;
   .title {
-    background-color: var(--clr-background-dark);
+    align-self: flex-start;
     width: 80%;
+    margin: 40px 0 40px 10%;
+    background-color: var(--clr-background-dark);
     outline: none;
     border: 0;
     font-family: 'Oswald', sans-serif;
-    align-self: flex-start;
-    margin: 40px 0 40px 100px;
     font-size: 3rem;
     color: var(--clr-text-light);
     letter-spacing: 8px;
     text-shadow: 4px 4px 6px #121212;
-    ::placeholder {
-      color: var(--clr-text-light);
-    }
   }
 `;

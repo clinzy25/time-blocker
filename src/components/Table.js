@@ -19,12 +19,10 @@ export const Table = () => {
 const Wrapper = styled.article`
   width: 90%;
   min-width: 900px;
-  height: 100%;
   background-color: var(--clr-background-dark2);
   border-radius: 7px;
   margin-bottom: 200px;
   box-shadow: 5px 5px 10px #121212;
-
   .flex-container {
     display: flex;
   }

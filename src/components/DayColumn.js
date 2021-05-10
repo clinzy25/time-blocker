@@ -7,7 +7,13 @@ import { useWindowSize } from '@react-hook/window-size/throttled';
 import useScrollPosition from '@react-hook/window-scroll';
 import moment from 'moment';
 
-export const DayColumn = ({ day, date }) => {
+/**
+ * 
+ * @param {string} columnDay - day of week of DayColumn
+ * @param {string} date - formatted date to display under header
+ * @returns column header, empty task slots or tasks
+ */
+export const DayColumn = ({ columnDay, date }) => {
   const {
     timeColumn,
     addTask,
@@ -16,9 +22,11 @@ export const DayColumn = ({ day, date }) => {
     currentTime,
   } = useTableContext();
 
+  /** For button hover effect */
   const [btnKey, setBtnKey] = useState(null);
 
   const [width] = useWindowSize({ fps: 60 });
+  /** Used to determine if column headers on top for sticky positioning */
   const scrollY = useScrollPosition(60 /*fps*/);
 
   return (
@@ -29,13 +37,13 @@ export const DayColumn = ({ day, date }) => {
     >
       <div className={`header-container ${scrollY > 300 ? 'sticky' : ''}`}>
         <div>
-          <h2>{width < 1400 ? day[0] : day}</h2>
+          <h2>{width < 1400 ? columnDay[0] : columnDay}</h2>
           <h5 className='date'>{date}</h5>
         </div>
       </div>
       {timeColumn.map((_, index) => {
         index++;
-        const cellKey = day.concat(index);
+        const cellKey = columnDay.concat(index);
         const cellTime = timeColumn[index] - blockInterval * 60000;
         return (
           <div
@@ -58,7 +66,7 @@ export const DayColumn = ({ day, date }) => {
               onClick={() => {
                 addTask({
                   key: cellKey,
-                  dayOfWeek: day,
+                  dayOfWeek: columnDay,
                   date: date,
                   cellNumber: index,
                   timeStart: cellTime,
@@ -71,7 +79,7 @@ export const DayColumn = ({ day, date }) => {
             />
             {dayColumns.map(
               (column) =>
-                column.id === day &&
+                column.id === columnDay &&
                 column.tasks.map((task) => {
                   if (task.timeStart === cellTime) {
                     return <Task task={task} />;
@@ -99,7 +107,6 @@ const Wrapper = styled.div`
   grid-template-rows: ${(props) => `100px repeat(${props.gridInterval}, 1fr);`};
   border-radius: 5px;
   min-width: 100px;
-  border-left: 2px dotted var(--clr-background-dark2);
   z-index: 0;
   background-color: ${(props) =>
     props.date === moment(props.currentTime).format('l')
@@ -147,6 +154,9 @@ const Wrapper = styled.div`
     // must be absolute
     position: absolute;
     z-index: -1;
+    :hover {
+      filter: brightness(130%);
+    }
   }
   .sticky {
     position: sticky;

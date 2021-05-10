@@ -7,6 +7,7 @@ import {
   SET_BLOCK_SIZE,
   CLEAR_TABLE,
   DELETE_TASK,
+  SET_TABLE_TITLE,
 } from './actions';
 
 const table_reducer = (state, action) => {
@@ -15,22 +16,16 @@ const table_reducer = (state, action) => {
      * Table Controls
      */
     case SET_BLOCK_INTERVAL:
-      return {
-        ...state,
-        blockInterval: action.payload,
-      };
+      return { ...state, blockInterval: action.payload };
 
     case SET_TIME_RANGE:
-      return {
-        ...state,
-        timeRange: action.payload,
-      };
+      return { ...state, timeRange: action.payload };
 
     case SET_BLOCK_SIZE:
-      return {
-        ...state,
-        blockSize: action.payload,
-      };
+      return { ...state, blockSize: action.payload };
+
+    case SET_TABLE_TITLE:
+      return { ...state, tableTitle: action.payload };
 
     case SHIFT_DAYS:
       const newDayOrder = [
@@ -79,7 +74,7 @@ const table_reducer = (state, action) => {
         dayColumns: filteredDayColumns,
       };
     }
-    
+
     /** Populate @ array, between @param timeRange, with interval @param blockInterval */
     case GET_TIMES:
       const { blockInterval, timeRange, startTime } = state;

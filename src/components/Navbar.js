@@ -44,15 +44,14 @@ const Wrapper = styled.div`
   }
   .logout,
   .accessibility {
-    padding-right: 30px;
+    margin-right: 30px;
     font-weight: 100;
+    font-size: 1.2rem;
     color: var(--clr-text-light);
     text-decoration: none;
-    margin-right: 5px;
-    transition: transform 0.2s;
     text-shadow: 2px 2px 5px #121212;
     :hover {
-      transform: scale(1.05);
+      color: #5e6fc7;
     }
   }
 `;

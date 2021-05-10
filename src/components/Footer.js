@@ -1,12 +1,15 @@
 import styled from 'styled-components';
-import logo from '../images/CL-logo.png'
+import { FaGithub } from 'react-icons/fa';
 
 export const Footer = () => {
   return (
     <Wrapper>
-      <hr />
-      <img src={logo} alt='Conner Linzy' />
-      <hr />
+      <a className='cl' href='https://linzy.tech/' title='Author'>
+        CL
+      </a>
+      <a href='https://github.com/clinzy25/time-blocker' title='View On Github'>
+        <FaGithub className='github' />
+      </a>
     </Wrapper>
   );
 };
@@ -14,15 +17,20 @@ export const Footer = () => {
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 75px;
   background-color: var(--clr-background-dark2);
   color: var(--clr-text-light);
-  hr {
-    width: 40%;
-    border: 1px solid var(--clr-background-dark);
+  .github {
+    color: var(--clr-text-light);
+    height: 40px;
+    width: 40px;
   }
-  img {
-    height: 80px;
-    width: 80px;
+  .cl {
+    color: var(--clr-text-light);
+    font-size: 2.3rem;
+    text-decoration: none;
+    padding-right: 20px;
+    letter-spacing: 5px;
   }
 `;

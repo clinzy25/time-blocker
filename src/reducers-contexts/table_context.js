@@ -10,6 +10,7 @@ import {
   SET_BLOCK_SIZE,
   CLEAR_TABLE,
   DELETE_TASK,
+  SET_TABLE_TITLE,
 } from '../reducers-contexts/actions';
 
 const TableContext = React.createContext();
@@ -92,7 +93,7 @@ const TableProvider = ({ children }) => {
   const [warningModal, setWarningModal] = useState(false);
 
   const setTableTitle = (newTableTitle) => {
-    state.tableTitle = newTableTitle;
+    dispatch({type: SET_TABLE_TITLE, payload: newTableTitle})
   };
 
   const getTimes = () => {
@@ -125,10 +126,10 @@ const TableProvider = ({ children }) => {
     dispatch({ type: CLEAR_TABLE });
   };
 
-/**
- * Task Controls
- * @param {object} task 
- */
+  /**
+   * Task Controls
+   * @param {object} task
+   */
 
   const addTask = (task) => {
     dispatch({ type: ADD_TASK, payload: task });
@@ -165,7 +166,6 @@ const TableProvider = ({ children }) => {
     getTimes();
   }, [state.blockInterval, state.timeRange]);
 
-  
   /** Local storage setters */
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(state.dayColumns));

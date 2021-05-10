@@ -3,6 +3,9 @@ import { useTableContext } from '../reducers-contexts/table_context';
 import { DayColumn } from './DayColumn';
 import moment from 'moment';
 
+/**
+ * @returns DayColumns
+ */
 export const TasksContainer = () => {
   const { dayColumns, startTime, currentTime } = useTableContext();
   const daysOfWeek = [
@@ -29,20 +32,21 @@ export const TasksContainer = () => {
 
   return (
     <Wrapper>
-      {dayColumns.map((day, index) => (
+      {dayColumns.map((column, index) => (
         <DayColumn
-          date={getDatesFromCurrentTime(index + 1, day.id)}
           key={index}
-          day={day.id}
+          date={getDatesFromCurrentTime(index + 1, column.id)}
+          columnDay={column.id}
         />
       ))}
     </Wrapper>
   );
 };
 
+// Remove display: grid for mobile view
 const Wrapper = styled.section`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-gap: 2px;
+  /* grid-gap: 2px; */
 `;
