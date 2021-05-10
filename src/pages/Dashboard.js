@@ -4,10 +4,10 @@ import {Footer} from '../components/Footer'
 
 export const Dashboard = () => {
   return (
-    <div>
+    <main>
       <Navbar />
       <TableContainer />
       <Footer />
-    </div>
+    </main>
   );
 };

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
-import { FaPlusSquare } from 'react-icons/fa';
 import { Task } from './Task';
+import { FaPlusSquare } from 'react-icons/fa';
 import { useWindowSize } from '@react-hook/window-size/throttled';
 import useScrollPosition from '@react-hook/window-scroll';
 import moment from 'moment';

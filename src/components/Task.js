@@ -107,7 +107,7 @@ const Wrapper = styled.div`
   height: ${(props) => `${props.taskHeight}%`};
   border-radius: 5px;
   z-index: 1;
-  box-shadow: 2px 2px 7px black;
+  box-shadow: 2px 2px 7px #121212;
   border: ${(props) =>
     props.isCurrentTask(props)
       ? '3px solid var(--clr-accent)'
