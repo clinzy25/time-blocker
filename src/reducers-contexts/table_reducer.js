@@ -11,6 +11,9 @@ import {
 
 const table_reducer = (state, action) => {
   switch (action.type) {
+    /**
+     * Table Controls
+     */
     case SET_BLOCK_INTERVAL:
       return {
         ...state,
@@ -29,33 +32,8 @@ const table_reducer = (state, action) => {
         blockSize: action.payload,
       };
 
-    case GET_TIMES:
-      /** Divide block size by minutes in a day. Used to determine number of blocks */
-      const numBlocks = 1440 / state.blockInterval;
-      /** Convert timeRange to milliseconds*/
-      const timeRangeToMs = state.timeRange.map((time) => {
-        return state.startTime + time * 3600000;
-      });
-
-      /** Populate timeColumn array, between time ranges, with interval blockInterval */
-      let blockedTimeColumn = [];
-      blockedTimeColumn.push(timeRangeToMs[0]);
-      let lastTime = timeRangeToMs[0];
-      for (let i = 0; i < numBlocks; i++) {
-        let newTime = lastTime + state.blockInterval * 60000;
-        if (newTime >= timeRangeToMs[1]) break;
-        blockedTimeColumn.push(newTime);
-        lastTime = newTime;
-      }
-      blockedTimeColumn.push(timeRangeToMs[1]);
-
-      return {
-        ...state,
-        timeColumn: blockedTimeColumn,
-      };
-
     case SHIFT_DAYS:
-      let newDayOrder = [
+      const newDayOrder = [
         state.dayColumns[state.dayColumns.length - 1],
         ...state.dayColumns.slice(0, state.dayColumns.length - 1),
       ];
@@ -64,12 +42,22 @@ const table_reducer = (state, action) => {
         dayColumns: newDayOrder,
       };
 
+    case CLEAR_TABLE:
+      const clearedDayColumns = [...state.dayColumns];
+      clearedDayColumns.map((col) => (col.tasks = []));
+      return {
+        ...state,
+        dayColumns: clearedDayColumns,
+      };
+    /**
+     * Task Controls
+     */
     case ADD_TASK:
       const newDayColumns = [...state.dayColumns];
-      newDayColumns.find((day) => {
-        if (day.id === action.payload.dayOfWeek) {
-          const newTasks = [...day.tasks, action.payload];
-          day.tasks = newTasks;
+      newDayColumns.find((column) => {
+        if (column.id === action.payload.dayOfWeek) {
+          const newTasks = [...column.tasks, action.payload];
+          column.tasks = newTasks;
         }
       });
       return {
@@ -80,10 +68,10 @@ const table_reducer = (state, action) => {
     case DELETE_TASK: {
       const { cellKey, day } = action.payload;
       const filteredDayColumns = [...state.dayColumns];
-      filteredDayColumns.find((col) => {
-        if (col.id === day) {
-          const newTasks = col.tasks.filter((task) => task.key !== cellKey);
-          col.tasks = newTasks;
+      filteredDayColumns.find((column) => {
+        if (column.id === day) {
+          const newTasks = column.tasks.filter((task) => task.key !== cellKey);
+          column.tasks = newTasks;
         }
       });
       return {
@@ -91,19 +79,34 @@ const table_reducer = (state, action) => {
         dayColumns: filteredDayColumns,
       };
     }
+    
+    /** Populate @ array, between @param timeRange, with interval @param blockInterval */
+    case GET_TIMES:
+      const { blockInterval, timeRange, startTime } = state;
+      /** Divide @param blockInterval by minutes in a day. Determines number of blocks */
+      const numBlocks = 1440 / blockInterval;
+      /** Convert timeRange to milliseconds*/
+      const timeRangeToMs = timeRange.map((time) => startTime + time * 3600000);
+      let newTimeColumn = [];
+      /** First time determined by timeRange */
+      newTimeColumn.push(timeRangeToMs[0]);
+      let lastTimeInLoop = timeRangeToMs[0];
+      for (let i = 0; i < numBlocks; i++) {
+        let newTime = lastTimeInLoop + blockInterval * 60000;
+        if (newTime >= timeRangeToMs[1]) break;
+        newTimeColumn.push(newTime);
+        lastTimeInLoop = newTime;
+      }
+      /** Last time determined by timeRange */
+      newTimeColumn.push(timeRangeToMs[1]);
 
-    case CLEAR_TABLE:
-      const clearedDayColumns = [...state.dayColumns];
-      clearedDayColumns.map((col) => {
-        col.tasks = [];
-      });
       return {
         ...state,
-        dayColumns: clearedDayColumns,
+        timeColumn: newTimeColumn,
       };
 
     default:
-      return state;
+      throw new Error('No matching action type');
   }
 };
 

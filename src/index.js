@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import '../node_modules/react-grid-layout/css/styles.css'
-import '../node_modules/react-resizable/css/styles.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { TableProvider } from './reducers-contexts/table_context';
@@ -10,8 +8,8 @@ import { Auth0Provider } from '@auth0/auth0-react';
 
 ReactDOM.render(
   <Auth0Provider
-    domain='dev-jwfmg26d.us.auth0.com'
-    clientId='a5Y9Cp6iQrFMnyGag85UlBXCyEk5KPxn'
+    domain={process.env.REACT_APP_AUTH_DOMAIN}
+    clientId={process.env.REACT_APP_AUTH_CLIENT_ID}
     redirectUri={window.location.origin}
     cacheLocation='localstorage'
   >

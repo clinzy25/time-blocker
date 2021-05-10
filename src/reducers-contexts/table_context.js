@@ -56,6 +56,13 @@ const getLocalStorage = (item) => {
         ];
   }
   if (item === 'table_settings') {
+    /**
+     * Default values for table controls stored in array
+     * @default [blockInterval]
+     * @default [blockSize]
+     * @default [timeRange]
+     * @default [tableTitle]
+     */
     return table_settings
       ? JSON.parse(table_settings)
       : [30, 200, [9, 17], 'TASKS'];
@@ -71,13 +78,6 @@ const initialState = {
   ),
   currentTime: new Date().getTime(),
   timeColumn: [],
-  /**
-   * Default values set @function getLocalStorage'
-   * @default [blockInterval]
-   * @default [blockSize]
-   * @default [timeRange]
-   * @default [tableTitle]
-   */
   blockInterval: getLocalStorage('table_settings')[0],
   blockSize: getLocalStorage('table_settings')[1],
   timeRange: getLocalStorage('table_settings')[2],
@@ -125,7 +125,10 @@ const TableProvider = ({ children }) => {
     dispatch({ type: CLEAR_TABLE });
   };
 
-  /** Task controls */
+/**
+ * Task Controls
+ * @param {object} task 
+ */
 
   const addTask = (task) => {
     dispatch({ type: ADD_TASK, payload: task });
@@ -149,7 +152,7 @@ const TableProvider = ({ children }) => {
     dispatch({ type: DELETE_TASK, payload: { cellKey, day } });
   };
 
-  /** Update current time once per m */
+  /** Update current time once per minute */
   useEffect(() => {
     setInterval(() => {
       const newCurrentTime = new Date().getTime();
@@ -157,10 +160,13 @@ const TableProvider = ({ children }) => {
     }, 60000);
   }, [state.currentTime]);
 
+  /** Update timeColumn when table controls are adjusted */
   useEffect(() => {
     getTimes();
   }, [state.blockInterval, state.timeRange]);
 
+  
+  /** Local storage setters */
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(state.dayColumns));
   }, [state.dayColumns]);
