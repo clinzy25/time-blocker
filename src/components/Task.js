@@ -104,7 +104,7 @@ export const Task = ({ task }) => {
         {moment(task.timeEnd).format('LT')}
       </span>
       {/* Only display description if taskHeight > 60px */}
-      {taskHeight > 60 && (
+      {taskHeight > 45 && (
         <textarea
           type='text'
           placeholder='description...'
