@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
 import { FaWindowClose } from 'react-icons/fa';
@@ -13,13 +13,8 @@ import Draggable, { DraggableCore } from 'react-draggable';
  * @returns A task
  */
 export const Task = ({ task }) => {
-  const {
-    setTaskText,
-    deleteTask,
-    blockInterval,
-    currentTime,
-    blockSize
-  } = useTableContext();
+  const { setTaskText, deleteTask, blockInterval, currentTime } =
+    useTableContext();
   const {
     key,
     dayOfWeek,
@@ -35,15 +30,24 @@ export const Task = ({ task }) => {
    * Called by setTaskHeight from resize button and BlockSize slider
    * @param {string} reset
    */
-  const resizeTask = (reset) => {
-    if (reset === 'reset') {
-      task.initalBlockSize = blockInterval;
-      task.timeEnd = task.timeStart + blockInterval * 60000;
-      return 97;
-    } else {
-      return (initalBlockSize / blockInterval) * 97;
-    }
-  };
+  const resizeTask = useCallback(
+    (reset) => {
+      if (reset === 'reset') {
+        task.initalBlockSize = blockInterval;
+        task.timeEnd = task.timeStart + blockInterval * 60000;
+        return 97;
+      } else {
+        return (initalBlockSize / blockInterval) * 97;
+      }
+    },
+    [
+      task.initalBlockSize,
+      task.timeEnd,
+      task.timeStart,
+      blockInterval,
+      initalBlockSize,
+    ]
+  );
 
   /**
    * @param props - Styled components props attribute
@@ -59,7 +63,7 @@ export const Task = ({ task }) => {
 
   useEffect(() => {
     setTaskHeight(resizeTask());
-  }, [blockInterval]);
+  }, [blockInterval, resizeTask]);
 
   return (
     <Wrapper
@@ -143,7 +147,7 @@ const Wrapper = styled.div`
     font-size: 1.3rem;
     color: var(--clr-text-light);
     overflow-x: hidden;
-    
+
     ::placeholder {
       white-space: nowrap;
     }

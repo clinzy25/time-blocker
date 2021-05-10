@@ -1,17 +1,27 @@
 import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
 import moment from 'moment';
+import { useWindowSize } from '@react-hook/window-size/throttled';
 
 export const TimeColumn = () => {
   const { timeColumn, blockSize } = useTableContext();
+  const [width] = useWindowSize({ fps: 60 });
 
   return (
     <Wrapper blockSize={blockSize}>
       {timeColumn.map((time, index) => {
-        return (
+        return width >= 1100 ? (
           <p key={index} className='time'>
             {moment(time).format('LT')}
           </p>
+        ) : (
+          timeColumn.map((time, index) => {
+            return (
+              <p key={index} className='time'>
+                {moment(time).format('LT')}
+              </p>
+            );
+          })
         );
       })}
     </Wrapper>

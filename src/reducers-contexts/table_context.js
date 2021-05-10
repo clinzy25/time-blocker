@@ -25,7 +25,7 @@ const table_title = localStorage.getItem('table_title');
 const current_time_on_top = localStorage.getItem('current_time_on_top');
 
 /**
- * Default values retured if they DNE in localStorage
+ * Default values returned if they DNE in localStorage
  * @default [dayColumns] - see below
  * @default [block_interval] - 30
  * @default [block_size] - 200

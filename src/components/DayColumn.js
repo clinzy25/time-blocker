@@ -14,13 +14,8 @@ import moment from 'moment';
  * @returns column header, empty task slots or tasks, if available
  */
 export const DayColumn = ({ columnDay, date }) => {
-  const {
-    timeColumn,
-    addTask,
-    blockInterval,
-    dayColumns,
-    currentTime,
-  } = useTableContext();
+  const { timeColumn, addTask, blockInterval, dayColumns, currentTime } =
+    useTableContext();
 
   /** For button hover effect */
   const [btnKey, setBtnKey] = useState(null);
@@ -52,7 +47,7 @@ export const DayColumn = ({ columnDay, date }) => {
             task.timeStart < timeColumn[index + 1] - blockInterval * 60000
           ) {
             return <Task task={task} />;
-          }
+          } else return null;
         })
     );
   };
@@ -90,7 +85,7 @@ export const DayColumn = ({ columnDay, date }) => {
               className='add-task-btn'
               /** Hide add task btn until user hovers over */
               style={{
-                opacity: `${cellTime === btnKey || width < 1400 ? '1' : '0'}`,
+                opacity: `${cellTime === btnKey ? '1' : '0'}`,
               }}
               onClick={() => {
                 addTask({

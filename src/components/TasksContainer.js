@@ -14,13 +14,13 @@ export const TasksContainer = () => {
   const currentDayIndex =
     daysOfWeek.indexOf(moment(currentTime).format('dddd').toLowerCase()) + 1;
 
-    /**
-     * Current day of week will show today's date, and all previous and subsequent dates 
-     * are derived from it.
-     * @param {number} dayIndex 
-     * @param {string} dayName 
-     * @returns date for column header
-     */
+  /**
+   * Current day of week will show today's date, and all previous and subsequent dates
+   * are derived from it.
+   * @param {number} dayIndex
+   * @param {string} dayName
+   * @returns date for column header
+   */
   const getDatesFromCurrentTime = (dayIndex, dayName) => {
     if (dayIndex === currentDayIndex) {
       return moment(startTime).format('l');
@@ -44,10 +44,15 @@ export const TasksContainer = () => {
   );
 };
 
-// Remove display: grid for mobile view
 const Wrapper = styled.section`
+  /** Mobile view */
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-gap: 1px;
+
+  /** Desktop view */
+  @media only screen and (min-width: 1100px) {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 1px;
+  }
 `;
