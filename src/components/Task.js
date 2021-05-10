@@ -18,6 +18,7 @@ export const Task = ({ task }) => {
     deleteTask,
     blockInterval,
     currentTime,
+    blockSize
   } = useTableContext();
   const {
     key,
@@ -125,6 +126,7 @@ const Wrapper = styled.div`
   background-color: var(--clr-background-dark);
   border-radius: 5px;
   box-shadow: 2px 2px 7px #121212;
+  min-height: 75px;
   /** Props change if task is current task */
   border: ${(props) =>
     props.isCurrentTask(props)
@@ -134,12 +136,14 @@ const Wrapper = styled.div`
   .title-btns-container {
     display: flex;
     height: 40%;
-    max-height: 100px;
+    min-height: 40px;
+    max-height: 75px;
   }
   .task-title {
     font-size: 1.3rem;
     color: var(--clr-text-light);
     overflow-x: hidden;
+    
     ::placeholder {
       white-space: nowrap;
     }
@@ -164,7 +168,7 @@ const Wrapper = styled.div`
     color: var(--clr-text-light);
     font-family: 'Roboto Mono', monospace;
     align-self: flex-start;
-    margin: 0 0 3px 8px;
+    margin: 2% 0 3px 8px;
     position: relative;
   }
   .task-title,

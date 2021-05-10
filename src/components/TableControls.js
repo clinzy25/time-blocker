@@ -40,8 +40,7 @@ export const TableControls = () => {
         </div>
 
         {/* Block Interval */}
-        <div className='block-interval-container'>
-          <FormControl>
+          <FormControl className='block-interval-container'>
             <Typography
               className='slider-label'
               id='discrete-slider-small-steps'
@@ -62,10 +61,9 @@ export const TableControls = () => {
               <MenuItem value={120}>120</MenuItem>
             </Select>
           </FormControl>
-        </div>
 
         {/* Block Size */}
-        <div className='block-size-container'>
+        <FormControl className='block-size-container'>
           <Typography
             className='slider-label'
             id='discrete-slider-small-steps'
@@ -76,17 +74,17 @@ export const TableControls = () => {
           <Slider
             className='block-size-input'
             aria-labelledby='discrete-slider-small-steps'
-            defaultValue={blockSize}
+            value={blockSize}
             marks
-            min={100}
+            min={150}
             max={700}
             valueLabelDisplay='auto'
             onChange={(_, value) => setBlockSize(value)}
           />
-        </div>
+        </FormControl>
 
         {/* Time Range */}
-        <div className='time-range-container'>
+        <FormControl className='time-range-container'>
           <Typography
             className='slider-label time-range-label'
             id='range-slider'
@@ -96,7 +94,7 @@ export const TableControls = () => {
           </Typography>
           <Slider
             className='time-range-input'
-            defaultValue={timeRange}
+            value={timeRange}
             min={0}
             max={24}
             onChange={(_, value) => setTimeRange(value)}
@@ -111,11 +109,11 @@ export const TableControls = () => {
             <span className='time-range-label-small'>12:00AM</span>
             <span className='time-range-label-small'>11:59PM</span>
           </Typography>
-        </div>
+        </FormControl>
         <FormControlLabel
-          labelStyle={{ color: 'black' }}
           control={
             <Checkbox
+              className='checkbox'
               checked={currentTimeOnTop}
               onClick={() => setCurrentTimeOnTop()}
               name='currentTimeOnTop'
@@ -190,9 +188,7 @@ const Wrapper = styled.section`
     font-size: 0.8rem;
     letter-spacing: 1px;
   }
-  .time-range-input {
-    padding: 0 0 5px 0;
-  }
+
 
   /** Clear Table */
   .clear-table-container {
@@ -210,11 +206,12 @@ const Wrapper = styled.section`
       filter: brightness(130%);
     }
   }
-  
-  /** Current Time On Top */
-  .current-time-on-top-label {
-    font-family: 'Montserrat', sans-serif;
+
+  /** Checkbox */
+  .checkbox {
+    color: var(--clr-text-light);
   }
+
   /** Multi */
   .block-interval-container,
   .block-size-container,
@@ -226,7 +223,8 @@ const Wrapper = styled.section`
   .MuiSlider-rail {
     height: 3px;
   }
-  .slider-label {
+  .slider-label,
+  .current-time-on-top-label {
     font-family: 'Montserrat', sans-serif;
   }
 `;

@@ -79,8 +79,6 @@ export const DayColumn = ({ columnDay, date }) => {
           <section
             key={columnDay.concat(index)}
             className='task-slot'
-            /** Create timeColumn.length number of task slots per column */
-            style={{ gridArea: `2 / 1 / ${index + 2} / 2;` }}
             onMouseEnter={() => {
               setBtnKey(cellTime);
             }}
@@ -137,6 +135,7 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100px;
   }
   h2,
   .date {

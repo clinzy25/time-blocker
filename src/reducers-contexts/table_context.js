@@ -152,25 +152,12 @@ const TableProvider = ({ children }) => {
    * @param {string} dayOfWeek - DayColumn of task for lookup
    * @param {string} textType - Type of text being edited, 'title' or 'description'
    */
-  const setTaskText = (textType, newText, key, dayOfWeek) =>
-    /** Find task being edited in state */
-    state.dayColumns.map(
-      (col) =>
-        col.id === dayOfWeek &&
-        col.tasks.map((task) =>
-          /** Change title or description according to @param textType */
-          task.key === key && textType === 'title'
-            ? (task.title = newText)
-            : (task.description = newText)
-        )
-    );
-
-  // const setTaskText = (textType, newText, key, dayOfWeek) => {
-  //   dispatch({
-  //     type: SET_TASK_TEXT,
-  //     payload: { textType, newText, key, dayOfWeek },
-  //   });
-  // };
+  const setTaskText = (textType, newText, key, dayOfWeek) => {
+    dispatch({
+      type: SET_TASK_TEXT,
+      payload: { textType, newText, key, dayOfWeek },
+    });
+  };
 
   const addTask = (task) => {
     dispatch({ type: ADD_TASK, payload: task });
@@ -197,18 +184,6 @@ const TableProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(state.dayColumns));
   }, [state.dayColumns]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      'table_settings',
-      JSON.stringify([
-        state.blockInterval,
-        state.blockSize,
-        state.timeRange,
-        state.tableTitle,
-      ])
-    );
-  }, [state.blockInterval, state.blockSize, state.timeRange, state.tableTitle]);
 
   useEffect(() => {
     localStorage.setItem('block_interval', JSON.stringify(state.blockInterval));

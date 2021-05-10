@@ -2,21 +2,14 @@
 
 ## Issues
 
-- Limit blockSize lower limit to height of tasks in cell
 - Upper padding of tasks that dont start at the start time of the block. Ie. a 930-1000 task in a 900-1000 cell should fill the SECOND 50% of the block.
-- Resizing tasks should change the start / end time of the task
-- Task text only pushes to local storage after another task is added, need to trigger the re-render on submit.
 - Hovering over cell with expanded task should not show add task btn
 - Most inputs need debouncing
-- Local storage defaults wrong
-- Shift days bug
+- Cant add to last cell
 
 ## Todo:
 
-- Refactor all
 - Responsive tweaks
-- Limit block intervals to 10, 20, 30, 60, 90, and 120 min.
-- Current time always on top button.
 - A 'work on next week' button that displays the next week. This should evolove into a infinite foreward and backward looking calandar type of thing, where past tasks are permanently stored and visible
 - Resize
 - Drag and drop

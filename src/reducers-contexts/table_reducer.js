@@ -81,30 +81,27 @@ const table_reducer = (state, action) => {
         dayColumns: filteredDayColumns,
       };
     }
-
-    // case SET_TASK_TEXT:
-    //   const { textType, newText, key, dayOfWeek } = action.payload;
-    //   const newTextDayColumns = state.dayColumns.map((column) => {
-    //     if (column.id === dayOfWeek) {
-    //       const newTasks = column.tasks.map(
-    //         (task) => {
-    //           if (task.key === key && textType === 'title') {
-    //             return { ...task, title: newText };
-    //           }
-    //           if (task.key === key && textType === 'description') {
-    //             return { ...task, description: newText };
-    //           }
-    //         }
-    //         /** Change title or description according to @param textType */
-    //       );
-    //       return [...column.tasks, newTasks];
-    //     }
-    //     return {...state.dayColumns, newTextDayColumns}
-    //   });
-    //   return {
-    //     ...state,
-    //     dayColumns: newTextDayColumns,
-    //   };
+    
+    /** Return new dayColumn with updated task description or title */
+    case SET_TASK_TEXT:
+      const { textType, newText, key, dayOfWeek } = action.payload;
+      const newTextDayColumns = state.dayColumns.map((column) => {
+        if (column.id !== dayOfWeek) return column;
+        const newTasks = column.tasks.map((task) => {
+          if (task.key === key && textType === 'title') {
+            return { ...task, title: newText };
+          }
+          if (task.key === key && textType === 'description') {
+            return { ...task, description: newText };
+          }
+          return task;
+        });
+        return { ...column, tasks: newTasks };
+      });
+      return {
+        ...state,
+        dayColumns: newTextDayColumns,
+      };
 
     /**
      * Populate @ array, between @param timeRange, with interval @param blockInterval
