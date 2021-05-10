@@ -30,7 +30,7 @@ const table_reducer = (state, action) => {
       };
 
     case GET_TIMES:
-      /** Divide block size by minutes in a day */
+      /** Divide block size by minutes in a day. Used to determine number of blocks */
       const numBlocks = 1440 / state.blockInterval;
       /** Convert timeRange to milliseconds*/
       const timeRangeToMs = state.timeRange.map((time) => {

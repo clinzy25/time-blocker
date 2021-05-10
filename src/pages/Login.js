@@ -44,7 +44,7 @@ const Wrapper = styled.main`
     h1 {
       font-size: 5rem;
       text-align: center;
-      text-shadow: 6px 6px 10px black;
+      text-shadow: 6px 6px 10px #121212;
     }
     .description {
       font-size: 1.2rem;
@@ -65,12 +65,12 @@ const Wrapper = styled.main`
     background-color: var(--clr-accent);
     color: var(--clr-text-light);
     transition: transform 0.2s;
-    box-shadow: 6px 6px 10px black;
+    box-shadow: 6px 6px 10px #121212;
     :hover {
       background-color: var(--clr-accent);
       filter: brightness(110%);
       transform: scale(1.03);
-      box-shadow: 8px 8px 15px black;
+      box-shadow: 8px 8px 15px #121212;
     }
     :active {
       transform: translateY(3px);

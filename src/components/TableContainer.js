@@ -33,7 +33,7 @@ const Wrapper = styled.main`
     font-size: 3rem;
     color: var(--clr-text-light);
     letter-spacing: 8px;
-    text-shadow: 4px 4px 6px black;
+    text-shadow: 4px 4px 6px #121212;
     ::placeholder {
       color: var(--clr-text-light);
     }

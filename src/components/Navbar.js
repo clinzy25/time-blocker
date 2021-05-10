@@ -37,7 +37,7 @@ const Wrapper = styled.div`
   }
   .title {
     padding-left: 30px;
-    text-shadow: 4px 4px 6px black;
+    text-shadow: 4px 4px 6px #121212;
     .underscore {
       color: var(--clr-accent);
     }
@@ -50,7 +50,7 @@ const Wrapper = styled.div`
     text-decoration: none;
     margin-right: 5px;
     transition: transform 0.2s;
-    text-shadow: 2px 2px 5px black;
+    text-shadow: 2px 2px 5px #121212;
     :hover {
       transform: scale(1.05);
     }

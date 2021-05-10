@@ -1,4 +1,4 @@
-## View at: https://time-blocker.netlify.app/login
+## View at: https://time-blocker.netlify.app/
 
 ## Issues
 
@@ -17,6 +17,7 @@
 - Responsive tweaks
 - Limit block intervals to 10, 20, 30, 60, 90, and 120 min.
 - Current time always on top button.
+- A 'work on next week' button that displays the next week. This should evolove into a infinite foreward and backward looking calandar type of thing, where past tasks are permanently stored and visible
 - Resize
 - Drag and drop
 - Accessibility controls

@@ -18,6 +18,10 @@ const getLocalStorage = (item) => {
   let tasks = localStorage.getItem('tasks');
   let table_settings = localStorage.getItem('table_settings');
   if (item === 'tasks') {
+    /**
+     * Default values retured if tasks DNE in localStorage
+     * @default [dayColumns]
+     */
     return tasks
       ? JSON.parse(tasks)
       : [
@@ -59,25 +63,32 @@ const getLocalStorage = (item) => {
 };
 
 const initialState = {
-  // displays 12:00am of every day
+  /** 12:00am of current day */
   startTime: new Date(moment().format('LL')).getTime(),
-  // displays 11:59pm of every day
+  /** 11:59pm of current day */
   endTime: new Date().setTime(
     new Date(moment().format('LL')).getTime() + 86399000
   ),
   currentTime: new Date().getTime(),
   timeColumn: [],
-  blockInterval: 30 && getLocalStorage('table_settings')[0],
-  blockSize: 200 && getLocalStorage('table_settings')[1],
-  timeRange: [9, 17] && getLocalStorage('table_settings')[2],
-  tableTitle: 'TASKS' && getLocalStorage('table_settings')[3],
-  loading: false,
+  /**
+   * Default values set @function getLocalStorage'
+   * @default [blockInterval]
+   * @default [blockSize]
+   * @default [timeRange]
+   * @default [tableTitle]
+   */
+  blockInterval: getLocalStorage('table_settings')[0],
+  blockSize: getLocalStorage('table_settings')[1],
+  timeRange: getLocalStorage('table_settings')[2],
+  tableTitle: getLocalStorage('table_settings')[3],
   isWarningModalOpen: false,
   dayColumns: getLocalStorage('tasks'),
 };
 
 const TableProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
   const [warningModal, setWarningModal] = useState(false);
 
   const setTableTitle = (newTableTitle) => {
@@ -88,6 +99,13 @@ const TableProvider = ({ children }) => {
     dispatch({ type: GET_TIMES });
   };
 
+  /**
+   * Table Controls
+   * @param {number} newInterval
+   * @param {number} newBlockSize
+   * @param {array} newTimeRange
+   */
+
   const setBlockInterval = (newInterval) => {
     dispatch({ type: SET_BLOCK_INTERVAL, payload: newInterval });
   };
@@ -96,38 +114,21 @@ const TableProvider = ({ children }) => {
   };
 
   const shiftDays = () => {
-    console.log(moment(state.currentTime).format('dddd'));
     dispatch({ type: SHIFT_DAYS });
   };
 
   const setTimeRange = (newTimeRange) => {
-    dispatch({
-      type: SET_TIME_RANGE,
-      payload: newTimeRange || state.timeRange,
-    });
-  };
-
-  const addTask = (task) => {
-    dispatch({ type: ADD_TASK, payload: task });
+    dispatch({ type: SET_TIME_RANGE, payload: newTimeRange });
   };
 
   const clearTable = () => {
     dispatch({ type: CLEAR_TABLE });
   };
 
-  const getTaskTimeRange = (startOrEnd, cellNumber) => {
-    const timeRangeToMs = state.timeRange.map((time) => {
-      return state.startTime + time * 3600000;
-    });
-    let result;
-    if (startOrEnd === 'start') {
-      result =
-        timeRangeToMs[0] + state.blockInterval * 60000 * (cellNumber - 1);
-    }
-    if (startOrEnd === 'end') {
-      result = timeRangeToMs[0] + state.blockInterval * 60000 * cellNumber;
-    }
-    return moment(result).format('LT');
+  /** Task controls */
+
+  const addTask = (task) => {
+    dispatch({ type: ADD_TASK, payload: task });
   };
 
   const setTaskText = (textType, newText, cellKey, day) => {
@@ -148,6 +149,7 @@ const TableProvider = ({ children }) => {
     dispatch({ type: DELETE_TASK, payload: { cellKey, day } });
   };
 
+  /** Update current time once per m */
   useEffect(() => {
     setInterval(() => {
       const newCurrentTime = new Date().getTime();
@@ -184,7 +186,6 @@ const TableProvider = ({ children }) => {
         shiftDays,
         setTimeRange,
         addTask,
-        getTaskTimeRange,
         setBlockSize,
         setTaskText,
         clearTable,
