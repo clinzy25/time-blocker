@@ -7,7 +7,7 @@ export const WarningModal = () => {
   const { setWarningModal, clearTable } = useTableContext();
 
   return (
-    <Wrapper >
+    <Wrapper>
       <div className='modal'>
         <div className='title-container'>
           <IoAlertCircle className='alert-icon' />
@@ -73,17 +73,13 @@ const Wrapper = styled.div`
   }
   .yes,
   .no {
-    color: whitesmoke;
+    border: 0;
+    color: var(--clr-text-light);
     letter-spacing: 3px;
     font-size: 1.3rem;
     margin: 0 20px;
-    transition: transform 0.1s;
     :hover {
       filter: brightness(110%);
-      transform: scale(1.05);
-    }
-    :active {
-      transform: translateY(2px);
     }
   }
   .yes {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
 import { FaWindowClose } from 'react-icons/fa';
@@ -7,6 +7,11 @@ import moment from 'moment';
 import { MdDragHandle } from 'react-icons/md';
 import Draggable, { DraggableCore } from 'react-draggable';
 
+/**
+ * Each task's state is contained in this file.
+ * @param {object} task - Task from dayColumns.tasks
+ * @returns A task
+ */
 export const Task = ({ task }) => {
   const {
     setTaskText,
@@ -15,31 +20,39 @@ export const Task = ({ task }) => {
     currentTime,
   } = useTableContext();
   const {
-    initalBlockSize,
     key,
     dayOfWeek,
+    date,
     title,
     description,
     timeStart,
     timeEnd,
-    date,
+    initalBlockSize,
   } = task;
 
+  /**
+   * Called by setTaskHeight from resize button and BlockSize slider
+   * @param {string} reset
+   */
   const resizeTask = (reset) => {
     if (reset === 'reset') {
       task.initalBlockSize = blockInterval;
-      // task.timeEnd = // need to add
-      return 100;
-    } else return (initalBlockSize / blockInterval) * 97;
+      task.timeEnd = task.timeStart + blockInterval * 60000;
+      return 97;
+    } else {
+      return (initalBlockSize / blockInterval) * 97;
+    }
   };
 
-  const isCurrentTask = (props) => {
-    return (
-      props.timeStart <= props.currentTime &&
-      props.timeEnd >= props.currentTime &&
-      props.date === moment(props.currentTime).format('l')
-    );
-  };
+  /**
+   * @param props - Styled components props attribute
+   * @returns - true if currentTime is within task start/end time, else false
+   * Used to style current task
+   */
+  const isCurrentTask = (props) =>
+    props.timeStart <= props.currentTime &&
+    props.timeEnd >= props.currentTime &&
+    props.date === moment(props.currentTime).format('l');
 
   const [taskHeight, setTaskHeight] = useState(resizeTask());
 
@@ -56,25 +69,28 @@ export const Task = ({ task }) => {
       taskHeight={taskHeight}
       date={date}
     >
-      <div className='input-container'>
-        <div className='button-container'>
+      {/* Buttons */}
+      <div className='title-btns-container'>
+        <div className='btn-container'>
           <FaWindowClose
             title='Delete Task'
-            className='close-btn'
+            className='btn'
             onClick={() => deleteTask(key, dayOfWeek)}
           />
           <GiResize
-            className='close-btn'
             title='Expand / shrink to fill cell'
+            className='btn'
             onClick={() => setTaskHeight(resizeTask('reset'))}
           />
         </div>
+
+        {/* Inputs and time range */}
         <textarea
-          className='task-title'
           type='text'
           placeholder='Type a name...'
+          className='task-title'
           defaultValue={title}
-          focus
+          // autoFocus
           onChange={(e) => setTaskText('title', e.target.value, key, dayOfWeek)}
         />
       </div>
@@ -82,10 +98,11 @@ export const Task = ({ task }) => {
         {moment(task.timeStart).format('LT')} -&nbsp;
         {moment(task.timeEnd).format('LT')}
       </span>
+      {/* Only display description if taskHeight > 60px */}
       {taskHeight > 60 && (
         <textarea
-          placeholder='description...'
           type='text'
+          placeholder='description...'
           className='description'
           defaultValue={description}
           onChange={(e) =>
@@ -103,35 +120,37 @@ const Wrapper = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
-  background-color: var(--clr-background-dark);
   height: ${(props) => `${props.taskHeight}%`};
-  border-radius: 5px;
   z-index: 1;
+  background-color: var(--clr-background-dark);
+  border-radius: 5px;
   box-shadow: 2px 2px 7px #121212;
+  /** Props change if task is current task */
   border: ${(props) =>
     props.isCurrentTask(props)
       ? '3px solid var(--clr-accent)'
       : '2px solid var(--clr-background-dark3)'};
-  filter: ${(props) =>
-    props.isCurrentTask(props) ? 'brightness(150%)' : null};
-  .time-range {
-    color: var(--clr-text-light);
-    font-family: 'Roboto Mono', monospace;
-    align-self: flex-start;
-    margin-left: 8px;
-    margin-bottom: 3px;
-  }
-  .task-title {
-    border: 0;
-    font-size: 1.3rem;
-    color: var(--clr-text-light);
-  }
-  .input-container {
+  filter: ${(props) => props.isCurrentTask(props) && 'brightness(150%)'};
+  .title-btns-container {
     display: flex;
     height: 40%;
     max-height: 100px;
   }
-  .close-btn {
+  .task-title {
+    font-size: 1.3rem;
+    color: var(--clr-text-light);
+    overflow-x: hidden;
+    ::placeholder {
+      white-space: nowrap;
+    }
+  }
+  .btn-container {
+    order: 2;
+    width: 28px;
+    margin: 3px;
+    max-height: 300px;
+  }
+  .btn {
     height: 25px;
     width: 25px;
     order: 2;
@@ -141,28 +160,24 @@ const Wrapper = styled.div`
       filter: brightness(120%);
     }
   }
-  .checkbox {
-    color: blue;
-    ::after {
-      color: blue;
-    }
-  }
-  .button-container {
-    order: 2;
-    width: 28px;
-    margin: 3px;
-    max-height: 300px;
+  .time-range {
+    color: var(--clr-text-light);
+    font-family: 'Roboto Mono', monospace;
+    align-self: flex-start;
+    margin: 0 0 3px 8px;
+    position: relative;
   }
   .task-title,
   .description {
     width: 90%;
     margin: 5px;
     outline: none;
+    resize: none;
+    border: none;
     font-family: 'Montserrat', sans-serif;
     color: var(--clr-text-light);
     background-color: var(--clr-background-dark);
     letter-spacing: 1px;
-    resize: none;
     ::-webkit-scrollbar {
       width: 12px;
       background-color: var(--clr-background-dark);
@@ -175,15 +190,8 @@ const Wrapper = styled.div`
   }
   .description {
     height: 100%;
-    border: none;
     color: #a4a4a4;
     letter-spacing: 2px;
     line-height: 130%;
-    margin-bottom: 20px;
-  }
-  .drag-handle {
-    height: 20px;
-    width: 20px;
-    cursor: s-resize;
   }
 `;

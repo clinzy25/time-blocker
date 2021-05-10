@@ -8,10 +8,14 @@ import {
   CLEAR_TABLE,
   DELETE_TASK,
   SET_TABLE_TITLE,
+  SET_CURRENT_TIME_ON_TOP,
+  SET_TASK_TEXT,
 } from './actions';
 
 const table_reducer = (state, action) => {
   switch (action.type) {
+    case SET_TABLE_TITLE:
+      return { ...state, tableTitle: action.payload };
     /**
      * Table Controls
      */
@@ -23,9 +27,6 @@ const table_reducer = (state, action) => {
 
     case SET_BLOCK_SIZE:
       return { ...state, blockSize: action.payload };
-
-    case SET_TABLE_TITLE:
-      return { ...state, tableTitle: action.payload };
 
     case SHIFT_DAYS:
       const newDayOrder = [
@@ -44,6 +45,12 @@ const table_reducer = (state, action) => {
         ...state,
         dayColumns: clearedDayColumns,
       };
+
+    case SET_CURRENT_TIME_ON_TOP:
+      return {
+        ...state,
+        currentTimeOnTop: !state.currentTimeOnTop,
+      };
     /**
      * Task Controls
      */
@@ -61,11 +68,11 @@ const table_reducer = (state, action) => {
       };
 
     case DELETE_TASK: {
-      const { cellKey, day } = action.payload;
+      const { key, dayOfWeek } = action.payload;
       const filteredDayColumns = [...state.dayColumns];
       filteredDayColumns.find((column) => {
-        if (column.id === day) {
-          const newTasks = column.tasks.filter((task) => task.key !== cellKey);
+        if (column.id === dayOfWeek) {
+          const newTasks = column.tasks.filter((task) => task.key !== key);
           column.tasks = newTasks;
         }
       });
@@ -75,9 +82,42 @@ const table_reducer = (state, action) => {
       };
     }
 
-    /** Populate @ array, between @param timeRange, with interval @param blockInterval */
+    // case SET_TASK_TEXT:
+    //   const { textType, newText, key, dayOfWeek } = action.payload;
+    //   const newTextDayColumns = state.dayColumns.map((column) => {
+    //     if (column.id === dayOfWeek) {
+    //       const newTasks = column.tasks.map(
+    //         (task) => {
+    //           if (task.key === key && textType === 'title') {
+    //             return { ...task, title: newText };
+    //           }
+    //           if (task.key === key && textType === 'description') {
+    //             return { ...task, description: newText };
+    //           }
+    //         }
+    //         /** Change title or description according to @param textType */
+    //       );
+    //       return [...column.tasks, newTasks];
+    //     }
+    //     return {...state.dayColumns, newTextDayColumns}
+    //   });
+    //   return {
+    //     ...state,
+    //     dayColumns: newTextDayColumns,
+    //   };
+
+    /**
+     * Populate @ array, between @param timeRange, with interval @param blockInterval
+     * If currentTimeOnTop is checked, filter times by currentTime before updating state
+     * */
     case GET_TIMES:
-      const { blockInterval, timeRange, startTime } = state;
+      const {
+        blockInterval,
+        timeRange,
+        startTime,
+        currentTimeOnTop,
+        currentTime,
+      } = state;
       /** Divide @param blockInterval by minutes in a day. Determines number of blocks */
       const numBlocks = 1440 / blockInterval;
       /** Convert timeRange to milliseconds*/
@@ -94,10 +134,13 @@ const table_reducer = (state, action) => {
       }
       /** Last time determined by timeRange */
       newTimeColumn.push(timeRangeToMs[1]);
-
       return {
         ...state,
-        timeColumn: newTimeColumn,
+        timeColumn: currentTimeOnTop
+          ? newTimeColumn.filter(
+              (time) => time >= currentTime - blockInterval * 60000
+            )
+          : newTimeColumn,
       };
 
     default:

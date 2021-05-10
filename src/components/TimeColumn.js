@@ -19,21 +19,19 @@ export const TimeColumn = () => {
 };
 
 const Wrapper = styled.div`
-  width: 100%;
+  min-width: 125px;
   display: flex;
   flex-flow: column;
   align-items: flex-end;
   padding-top: 100px;
-  width: 125px;
-  min-width: 125px;
-  border-right: 3px solid var(--clr-background-dark);
+  border-right: 2px solid var(--clr-background-dark);
   .time {
+    position: relative;
+    top: -10px;
+    margin: 0 5px 0 0;
     height: ${(props) => `${props.blockSize}px;`};
     color: var(--clr-text-light);
     font-family: 'Roboto Mono', monospace;
     letter-spacing: 2px;
-    margin: 0 5px 0 0;
-    position: relative;
-    top: -10px;
   }
 `;

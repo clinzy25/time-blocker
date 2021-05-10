@@ -48,5 +48,5 @@ const Wrapper = styled.section`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  /* grid-gap: 2px; */
+  grid-gap: 1px;
 `;

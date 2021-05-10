@@ -11,6 +11,8 @@ import {
   CLEAR_TABLE,
   DELETE_TASK,
   SET_TABLE_TITLE,
+  SET_CURRENT_TIME_ON_TOP,
+  SET_TASK_TEXT,
 } from '../reducers-contexts/actions';
 
 const TableContext = React.createContext();
@@ -85,6 +87,7 @@ const initialState = {
   tableTitle: getLocalStorage('table_settings')[3],
   isWarningModalOpen: false,
   dayColumns: getLocalStorage('tasks'),
+  currentTimeOnTop: false,
 };
 
 const TableProvider = ({ children }) => {
@@ -93,11 +96,11 @@ const TableProvider = ({ children }) => {
   const [warningModal, setWarningModal] = useState(false);
 
   const setTableTitle = (newTableTitle) => {
-    dispatch({type: SET_TABLE_TITLE, payload: newTableTitle})
+    dispatch({ type: SET_TABLE_TITLE, payload: newTableTitle });
   };
 
-  const getTimes = () => {
-    dispatch({ type: GET_TIMES });
+  const getTimes = (currentTime) => {
+    dispatch({ type: GET_TIMES, payload: currentTime });
   };
 
   /**
@@ -110,6 +113,7 @@ const TableProvider = ({ children }) => {
   const setBlockInterval = (newInterval) => {
     dispatch({ type: SET_BLOCK_INTERVAL, payload: newInterval });
   };
+
   const setBlockSize = (newBlockSize) => {
     dispatch({ type: SET_BLOCK_SIZE, payload: newBlockSize });
   };
@@ -126,31 +130,43 @@ const TableProvider = ({ children }) => {
     dispatch({ type: CLEAR_TABLE });
   };
 
+  const setCurrentTimeOnTop = () => {
+    dispatch({ type: SET_CURRENT_TIME_ON_TOP });
+  };
+
   /**
    * Task Controls
-   * @param {object} task
+   * @param {object} task - A new task to be added to the state
+   * @param {number} key - Task key of task for lookup, which is cellTime in ms
+   * @param {string} dayOfWeek - DayColumn of task for lookup
+   * @param {string} textType - Type of text being edited, 'title' or 'description'
    */
+  const setTaskText = (textType, newText, key, dayOfWeek) =>
+    /** Find task being edited in state */
+    state.dayColumns.map(
+      (col) =>
+        col.id === dayOfWeek &&
+        col.tasks.map((task) =>
+          /** Change title or description according to @param textType */
+          task.key === key && textType === 'title'
+            ? (task.title = newText)
+            : (task.description = newText)
+        )
+    );
+
+  // const setTaskText = (textType, newText, key, dayOfWeek) => {
+  //   dispatch({
+  //     type: SET_TASK_TEXT,
+  //     payload: { textType, newText, key, dayOfWeek },
+  //   });
+  // };
 
   const addTask = (task) => {
     dispatch({ type: ADD_TASK, payload: task });
   };
 
-  const setTaskText = (textType, newText, cellKey, day) => {
-    return state.dayColumns.map((col) => {
-      if (col.id === day) {
-        return col.tasks.map((task) => {
-          if (task.key === cellKey) {
-            return textType === 'title'
-              ? (task.title = newText)
-              : (task.description = newText);
-          } else return null;
-        });
-      } else return null;
-    });
-  };
-
-  const deleteTask = (cellKey, day) => {
-    dispatch({ type: DELETE_TASK, payload: { cellKey, day } });
+  const deleteTask = (key, dayOfWeek) => {
+    dispatch({ type: DELETE_TASK, payload: { key, dayOfWeek } });
   };
 
   /** Update current time once per minute */
@@ -164,7 +180,7 @@ const TableProvider = ({ children }) => {
   /** Update timeColumn when table controls are adjusted */
   useEffect(() => {
     getTimes();
-  }, [state.blockInterval, state.timeRange]);
+  }, [state.blockInterval, state.timeRange, state.currentTimeOnTop]);
 
   /** Local storage setters */
   useEffect(() => {
@@ -181,7 +197,7 @@ const TableProvider = ({ children }) => {
         state.tableTitle,
       ])
     );
-  }, [state.blockInterval, state.blockSize, state.timeRange, state.tableTitle]);
+  }, [state.blockInterval, state.blockSize, state.timeRange, state.tableTitle, state.dayColumns]);
 
   return (
     <TableContext.Provider
@@ -199,6 +215,7 @@ const TableProvider = ({ children }) => {
         setWarningModal,
         deleteTask,
         setTableTitle,
+        setCurrentTimeOnTop,
       }}
     >
       {children}

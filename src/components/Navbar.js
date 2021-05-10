@@ -12,12 +12,12 @@ export const Navbar = () => {
       </h1>
       <div className='right-side-items'>
         <h3 className='accessibility'>Accessibility</h3>
-        <Link
+        <span
           className='logout'
           onClick={() => logout({ returnTo: window.location.origin })}
         >
           Logout
-        </Link>
+        </span>
       </div>
     </Wrapper>
   );
