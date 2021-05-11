@@ -2,6 +2,7 @@
 
 ## Issues
 
+- Auth0 user data storage
 - Upper padding of tasks that dont start at the start time of the block. Ie. a 930-1000 task in a 900-1000 cell should fill the _second_ 50% of the block.
 - Hovering over cell with expanded task should not show add task btn
 - Most inputs need debouncing
