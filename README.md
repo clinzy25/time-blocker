@@ -24,7 +24,9 @@
 - User can customize colors of cells and columns
 - Task Search
 - Task tagging
+- Task modal view with detailed text editing
 
 ### Beyond
 
 - Google calandar import
+- Misc todo list with timeless tasks

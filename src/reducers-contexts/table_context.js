@@ -178,7 +178,12 @@ const TableProvider = ({ children }) => {
   /** Update timeColumn when table controls are adjusted */
   useEffect(() => {
     getTimes();
-  }, [state.blockInterval, state.timeRange, state.currentTimeOnTop]);
+  }, [
+    state.blockInterval,
+    state.timeRange,
+    state.currentTimeOnTop,
+    state.currentTime,
+  ]);
 
   /** Local storage setters */
   useEffect(() => {

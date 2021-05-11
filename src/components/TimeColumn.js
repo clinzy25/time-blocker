@@ -15,6 +15,7 @@ export const TimeColumn = () => {
             {moment(time).format('LT')}
           </p>
         ) : (
+          /** Incomplete mobile view solution */
           timeColumn.map((time, index) => {
             return (
               <p key={index} className='time'>

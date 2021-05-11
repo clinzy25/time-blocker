@@ -22,8 +22,6 @@ export const TableControls = () => {
     setBlockSize,
     setWarningModal,
     warningModal,
-    // getTimes,
-    // currentTime,
     currentTimeOnTop,
     setCurrentTimeOnTop,
   } = useTableContext();
@@ -40,27 +38,30 @@ export const TableControls = () => {
         </div>
 
         {/* Block Interval */}
-          <FormControl className='block-interval-container'>
-            <Typography
-              className='slider-label'
-              id='discrete-slider-small-steps'
-              gutterBottom
-            >
-              <span>Block Interval (minutes)</span>
-            </Typography>
-            <Select
-              labelId='demo-simple-select-label'
-              className='block-interval-input'
-              id='demo-simple-select'
-              defaultValue={blockInterval}
-              onChange={(e) => setBlockInterval(e.target.value)}
-            >
-              <MenuItem value={20}>20</MenuItem>
-              <MenuItem value={30}>30</MenuItem>
-              <MenuItem value={60}>60</MenuItem>
-              <MenuItem value={120}>120</MenuItem>
-            </Select>
-          </FormControl>
+        <FormControl className='block-interval-container'>
+          <Typography
+            className='slider-label'
+            id='discrete-slider-small-steps'
+            gutterBottom
+          >
+            <span>Block Interval</span>
+          </Typography>
+          <Select
+            labelId='demo-simple-select-label'
+            className='block-interval-input'
+            id='demo-simple-select'
+            value={blockInterval}
+            onChange={(e) => setBlockInterval(e.target.value)}
+          >
+            <MenuItem value={20}>20 min</MenuItem>
+            <MenuItem value={30}>30 min</MenuItem>
+            <MenuItem value={60}>1 hr</MenuItem>
+            <MenuItem value={120}>2 hr</MenuItem>
+            <MenuItem value={180}>3 hr</MenuItem>
+            <MenuItem value={240}>4 hr</MenuItem>
+            <MenuItem value={300}>5 hr</MenuItem>
+          </Select>
+        </FormControl>
 
         {/* Block Size */}
         <FormControl className='block-size-container'>
@@ -69,7 +70,7 @@ export const TableControls = () => {
             id='discrete-slider-small-steps'
             gutterBottom
           >
-            <span>Block Size (height)</span>
+            <span>Block Size</span>
           </Typography>
           <Slider
             className='block-size-input'
@@ -188,7 +189,6 @@ const Wrapper = styled.section`
     font-size: 0.8rem;
     letter-spacing: 1px;
   }
-
 
   /** Clear Table */
   .clear-table-container {
