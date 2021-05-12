@@ -2,12 +2,15 @@ import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
 import { DayColumn } from './DayColumn';
 import moment from 'moment';
+import { TimeColumn } from './TimeColumn';
+import { useWindowSize } from '@react-hook/window-size/throttled';
 
 /**
  * @returns DayColumns
  */
 export const TasksContainer = () => {
   const { dayColumns, startTime, currentTime } = useTableContext();
+  const [width] = useWindowSize({ fps: 60 });
 
   const daysOfWeek = dayColumns.map((column) => column.id);
 
@@ -31,8 +34,13 @@ export const TasksContainer = () => {
     ).format('l');
   };
 
-  return (
-    <Wrapper>
+  /**
+   * Desktop - return all dayColumns and one TimeColumn 
+   * (TimeColumn in Table.js)
+   * Mobile - return one TimeColumn per DayColumn
+   */
+  return width >= 1100 ? (
+    <WrapperDesktop>
       {dayColumns.map((column, index) => (
         <DayColumn
           key={index}
@@ -40,19 +48,31 @@ export const TasksContainer = () => {
           columnDay={column.id}
         />
       ))}
-    </Wrapper>
+    </WrapperDesktop>
+  ) : (
+    dayColumns.map((column, index) => (
+      <WrapperMobile>
+        <TimeColumn />
+        <DayColumn
+          key={index}
+          date={getDatesFromCurrentTime(index + 1, column.id)}
+          columnDay={column.id}
+        />
+      </WrapperMobile>
+    ))
   );
 };
 
-const Wrapper = styled.section`
-  /** Mobile view */
-  width: 100%;
-
   /** Desktop view */
-  @media only screen and (min-width: 1100px) {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-gap: 1px;
-  }
+const WrapperDesktop = styled.section`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-gap: 1px;
+`;
+
+/** Mobile view */
+const WrapperMobile = styled.article`
+  display: grid;
+  grid-template-columns: 40px 1fr;
 `;

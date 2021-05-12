@@ -142,12 +142,13 @@ const Wrapper = styled.div`
     height: 40%;
     min-height: 40px;
     max-height: 75px;
+    width: 100%;
   }
   .task-title {
     font-size: 1.3rem;
     color: var(--clr-text-light);
     overflow-x: hidden;
-
+    width: 100%;
     ::placeholder {
       white-space: nowrap;
     }

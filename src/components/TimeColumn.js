@@ -10,19 +10,10 @@ export const TimeColumn = () => {
   return (
     <Wrapper blockSize={blockSize}>
       {timeColumn.map((time, index) => {
-        return width >= 1100 ? (
+        return (
           <p key={index} className='time'>
             {moment(time).format('LT')}
           </p>
-        ) : (
-          /** Incomplete mobile view solution */
-          timeColumn.map((time, index) => {
-            return (
-              <p key={index} className='time'>
-                {moment(time).format('LT')}
-              </p>
-            );
-          })
         );
       })}
     </Wrapper>
@@ -30,7 +21,7 @@ export const TimeColumn = () => {
 };
 
 const Wrapper = styled.div`
-  min-width: 125px;
+  min-width: 100px;
   display: flex;
   flex-flow: column;
   align-items: flex-end;
@@ -44,5 +35,13 @@ const Wrapper = styled.div`
     color: var(--clr-text-light);
     font-family: 'Roboto Mono', monospace;
     letter-spacing: 2px;
+  }
+  @media only screen and (max-width: 1100px) {
+    min-width: 0px;
+    .time {
+      word-wrap: break-word;
+      width: 45%;
+      top: 20px;
+    }
   }
 `;
