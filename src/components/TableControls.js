@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { BiRotateRight } from 'react-icons/bi';
 import { MdRemoveCircle } from 'react-icons/md';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
@@ -10,6 +12,7 @@ import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useTableContext } from '../reducers-contexts/table_context';
 import { WarningModal } from './WarningModal';
+import { useWindowSize } from '@react-hook/window-size/throttled';
 
 export const TableControls = () => {
   const {
@@ -26,8 +29,20 @@ export const TableControls = () => {
     setCurrentTimeOnTop,
   } = useTableContext();
 
+  const [width] = useWindowSize({ fps: 60 });
+  const [expandedControls, setExpandedControls] = useState(false);
+
   return (
-    <Wrapper>
+    <Wrapper expanded={expandedControls}>
+      {width <= 800 ? (
+        <div className='minimized'>
+          <GiHamburgerMenu
+            className='hamburger'
+            onClick={() => setExpandedControls(!expandedControls)}
+          />
+          {!expandedControls && <h2>Table Controls</h2>}
+        </div>
+      ) : null}
       <section className='left-side-controls'>
         {/* Shift Days */}
         <div className='shift-days-container'>
@@ -36,7 +51,6 @@ export const TableControls = () => {
             Shift days
           </label>
         </div>
-
         {/* Block Interval */}
         <FormControl className='block-interval-container'>
           <Typography
@@ -226,5 +240,21 @@ const Wrapper = styled.section`
   .slider-label,
   .current-time-on-top-label {
     font-family: 'Montserrat', sans-serif;
+  }
+  @media only screen and (max-width: 800px) {
+    height: ${(props) => `${props.expanded ? '10%' : '50px'}`};
+    overflow: hidden;
+    .hamburger {
+      height: 50px;
+      width: 50px;
+      color: var(--clr-accent);
+      cursor: pointer;
+    }
+    .minimized {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      top: 240px;
+    }
   }
 `;

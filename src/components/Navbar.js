@@ -43,7 +43,7 @@ const Wrapper = styled.div`
   }
   .logout,
   .accessibility {
-    margin-right: 30px;
+    margin: 0 30px 0 0;
     font-weight: 100;
     font-size: 1.2rem;
     color: var(--clr-text-light);
@@ -52,6 +52,24 @@ const Wrapper = styled.div`
     cursor: pointer;
     :hover {
       color: #5e6fc7;
+    }
+  }
+  @media only screen and (max-width: 800px) {
+    height: 90px;
+    .title {
+      font-size: 1.5rem;
+      margin-right: 10px;
+    }
+    .right-side-items {
+      height: 100%;
+      flex-flow: column-reverse;
+      justify-content: space-around;
+      align-items: flex-end;
+    }
+    .logout,
+    .accessibility {
+      font-weight: 100;
+      font-size: 0.9rem;
     }
   }
 `;

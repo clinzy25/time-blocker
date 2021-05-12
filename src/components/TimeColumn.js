@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 import { useTableContext } from '../reducers-contexts/table_context';
 import moment from 'moment';
-import { useWindowSize } from '@react-hook/window-size/throttled';
 
 export const TimeColumn = () => {
   const { timeColumn, blockSize } = useTableContext();
-  const [width] = useWindowSize({ fps: 60 });
 
   return (
     <Wrapper blockSize={blockSize}>
