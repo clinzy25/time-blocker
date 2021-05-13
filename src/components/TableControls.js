@@ -44,6 +44,7 @@ export const TableControls = () => {
         </div>
       ) : null}
       <section className='left-side-controls'>
+        
         {/* Shift Days */}
         <div className='shift-days-container'>
           <BiRotateRight className='shift-days-icon' onClick={shiftDays} />
@@ -51,6 +52,7 @@ export const TableControls = () => {
             Shift days
           </label>
         </div>
+        
         {/* Block Interval */}
         <FormControl className='block-interval-container'>
           <Typography
