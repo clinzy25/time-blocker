@@ -8,7 +8,6 @@ import useScrollPosition from '@react-hook/window-scroll';
 import moment from 'moment';
 
 /**
- *
  * @param {string} columnDay - day of week of DayColumn
  * @param {string} date - formatted date to display under header
  * @returns column header, empty task slots or tasks, if available
