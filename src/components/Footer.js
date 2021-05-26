@@ -4,7 +4,7 @@ import { FaGithub } from 'react-icons/fa';
 export const Footer = () => {
   return (
     <Wrapper>
-      <a className='cl' href='https://linzy.tech/' title='Author'>
+      <a className='cl' href='https://connerlinzy.com/' title='Author'>
         CL
       </a>
       <a href='https://github.com/clinzy25/time-blocker' title='View On Github'>
