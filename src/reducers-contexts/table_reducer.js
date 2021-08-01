@@ -10,12 +10,16 @@ import {
   SET_TABLE_TITLE,
   SET_CURRENT_TIME_ON_TOP,
   SET_TASK_TEXT,
+  SET_USER,
 } from './actions';
 
 const table_reducer = (state, action) => {
   switch (action.type) {
     case SET_TABLE_TITLE:
       return { ...state, tableTitle: action.payload };
+    case SET_USER: {
+      return { ...state, user: action.payload };
+    }
     /**
      * Table Controls
      */
@@ -81,7 +85,7 @@ const table_reducer = (state, action) => {
         dayColumns: filteredDayColumns,
       };
     }
-    
+
     /** Return new dayColumn with updated task description or title */
     case SET_TASK_TEXT:
       const { textType, newText, key, dayOfWeek } = action.payload;

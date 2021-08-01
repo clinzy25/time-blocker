@@ -33,9 +33,9 @@ export const DayColumn = ({ columnDay, date }) => {
     return dayColumns.map(
       (column) =>
         column.id === columnDay &&
-        column.tasks.map((task) => {
+        column.tasks.map((task, i) => {
           if (task.timeStart === cellTime) {
-            return <Task task={task} />;
+            return <Task key={i} task={task} />;
           }
           /**
            * If task time is within one blockInterval of current cellTime

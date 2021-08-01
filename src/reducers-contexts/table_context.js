@@ -13,7 +13,9 @@ import {
   SET_TABLE_TITLE,
   SET_CURRENT_TIME_ON_TOP,
   SET_TASK_TEXT,
+  SET_USER,
 } from '../reducers-contexts/actions';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const TableContext = React.createContext();
 
@@ -84,6 +86,7 @@ const getLocalStorage = (item) => {
 };
 
 const initialState = {
+  user: null,
   /** 12:00am of current day */
   startTime: new Date(moment().format('LL')).getTime(),
   /** 11:59pm of current day */
@@ -105,6 +108,10 @@ const TableProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const [warningModal, setWarningModal] = useState(false);
+
+  const setUser = (user) => {
+    dispatch({ type: SET_USER, payload: user });
+  };
 
   const setTableTitle = (newTableTitle) => {
     dispatch({ type: SET_TABLE_TITLE, payload: newTableTitle });
@@ -213,6 +220,7 @@ const TableProvider = ({ children }) => {
     );
   }, [state.currentTimeOnTop]);
 
+  console.log('State:', state);
   return (
     <TableContext.Provider
       value={{
@@ -230,6 +238,7 @@ const TableProvider = ({ children }) => {
         deleteTask,
         setTableTitle,
         setCurrentTimeOnTop,
+        setUser,
       }}
     >
       {children}

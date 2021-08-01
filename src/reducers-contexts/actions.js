@@ -9,3 +9,4 @@ export const DELETE_TASK = 'DELETE_TASK';
 export const SET_TABLE_TITLE = 'SET_TABLE_TITLE';
 export const SET_CURRENT_TIME_ON_TOP = 'SET_CURRENT_TIME_ON_TOP';
 export const SET_TASK_TEXT = 'SET_TASK_TEXT';
+export const SET_USER = 'SET_USER';
