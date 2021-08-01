@@ -10,16 +10,44 @@ import {
   SET_TABLE_TITLE,
   SET_CURRENT_TIME_ON_TOP,
   SET_TASK_TEXT,
-  SET_USER,
-} from './actions';
+  GET_TABLE_SETTINGS_BEGIN,
+  GET_TABLE_SETTINGS_SUCCESS,
+  SET_USER_BEGIN,
+  SET_USER_SUCCESS,
+} from './table_actions';
 
 const table_reducer = (state, action) => {
   switch (action.type) {
     case SET_TABLE_TITLE:
       return { ...state, tableTitle: action.payload };
-    case SET_USER: {
+    case SET_USER_BEGIN: {
+      return { ...state, loading: true };
+    }
+    case SET_USER_SUCCESS: {
       return { ...state, user: action.payload };
     }
+    case GET_TABLE_SETTINGS_BEGIN:
+      return { ...state, loading: true };
+      case GET_TABLE_SETTINGS_SUCCESS:
+      const {
+        block_interval,
+        block_size,
+        current_time_on_top,
+        day_columns,
+        table_title,
+        time_range,
+      } = action.payload;
+      console.log(day_columns)
+      return {
+        ...state,
+        blockInterval: block_interval,
+        blockSize: block_size,
+        currentTimeOnTop: current_time_on_top,
+        tableTitle: table_title,
+        timeRange: time_range,
+        dayColumns: day_columns,
+        loading: false,
+      };
     /**
      * Table Controls
      */

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useTableContext } from '../reducers-contexts/table_context';
+import { useTableContext } from '../useReducer/table_context';
 import { Task } from './Task';
 import { FaPlusSquare } from 'react-icons/fa';
 import { useWindowSize } from '@react-hook/window-size/throttled';

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import { IoAlertCircle } from 'react-icons/io5';
-import { useTableContext } from '../reducers-contexts/table_context';
+import { useTableContext } from '../useReducer/table_context';
 
 export const WarningModal = () => {
   const { setWarningModal, clearTable } = useTableContext();

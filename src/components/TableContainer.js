@@ -1,9 +1,11 @@
 import styled from 'styled-components';
-import { useTableContext } from '../reducers-contexts/table_context';
+import { useTableContext } from '../useReducer/table_context';
 import { Table } from './Table';
+import loadingGif from '../images/preloader.gif';
+
 
 export const TableContainer = () => {
-  const { tableTitle, setTableTitle } = useTableContext();
+  const { tableTitle, setTableTitle, loading } = useTableContext();
 
   return (
     <Wrapper>
@@ -13,7 +15,7 @@ export const TableContainer = () => {
         defaultValue={tableTitle}
         onChange={(e) => setTableTitle(e.target.value)}
       />
-      <Table />
+      {loading ? <img src={loadingGif} alt='loading' /> : <Table />}
     </Wrapper>
   );
 };
@@ -34,5 +36,8 @@ const Wrapper = styled.main`
     color: var(--clr-text-light);
     letter-spacing: 8px;
     text-shadow: 4px 4px 6px #121212;
+  }
+  img {
+    width: 150px;
   }
 `;

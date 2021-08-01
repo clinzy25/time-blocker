@@ -13,77 +13,16 @@ import {
   SET_TABLE_TITLE,
   SET_CURRENT_TIME_ON_TOP,
   SET_TASK_TEXT,
-  SET_USER,
-} from '../reducers-contexts/actions';
-import { useAuth0 } from '@auth0/auth0-react';
+  GET_TABLE_SETTINGS_BEGIN,
+  GET_TABLE_SETTINGS_SUCCESS,
+  SET_USER_BEGIN,
+  SET_USER_SUCCESS,
+} from './table_actions';
+import db from '../firebase';
+import { useReducerAsync } from 'use-reducer-async';
+import { firebaseGetTableSettings, firebaseSetUser } from './firebase_actions';
 
 const TableContext = React.createContext();
-
-const tasks = localStorage.getItem('tasks');
-const block_interval = localStorage.getItem('block_interval');
-const block_size = localStorage.getItem('block_size');
-const time_range = localStorage.getItem('time_range');
-const table_title = localStorage.getItem('table_title');
-const current_time_on_top = localStorage.getItem('current_time_on_top');
-
-/**
- * Default values returned if they DNE in localStorage
- * @default [dayColumns] - see below
- * @default [block_interval] - 30
- * @default [block_size] - 200
- * @default [time_range] - [9,17]
- * @default [table_title] - 'TASKS'
- * @default [current_time_on_top] - false
- */
-const getLocalStorage = (item) => {
-  switch (item) {
-    case 'tasks':
-      return tasks
-        ? JSON.parse(tasks)
-        : [
-            {
-              id: 'monday',
-              tasks: [],
-            },
-            {
-              id: 'tuesday',
-              tasks: [],
-            },
-            {
-              id: 'wednesday',
-              tasks: [],
-            },
-            {
-              id: 'thursday',
-              tasks: [],
-            },
-            {
-              id: 'friday',
-              tasks: [],
-            },
-            {
-              id: 'saturday',
-              tasks: [],
-            },
-            {
-              id: 'sunday',
-              tasks: [],
-            },
-          ];
-    case 'block_interval':
-      return block_interval ? JSON.parse(block_interval) : 30;
-    case 'block_size':
-      return block_size ? JSON.parse(block_size) : 200;
-    case 'time_range':
-      return time_range ? JSON.parse(time_range) : [9, 17];
-    case 'table_title':
-      return table_title ? JSON.parse(table_title) : 'TASKS';
-    case 'current_time_on_top':
-      return current_time_on_top ? JSON.parse(current_time_on_top) : false;
-    default:
-      return null;
-  }
-};
 
 const initialState = {
   user: null,
@@ -96,22 +35,34 @@ const initialState = {
   currentTime: new Date().getTime(),
   timeColumn: [],
   isWarningModalOpen: false,
-  dayColumns: getLocalStorage('tasks'),
-  blockInterval: getLocalStorage('block_interval'),
-  blockSize: getLocalStorage('block_size'),
-  timeRange: getLocalStorage('time_range'),
-  tableTitle: getLocalStorage('table_title'),
-  currentTimeOnTop: getLocalStorage('current_time_on_top'),
+  loading: true,
 };
 
 const TableProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const asyncActionHandlers = {
+    TABLE_SETTINGS:
+      ({ dispatch }) =>
+      async (action) => {
+        dispatch({ type: GET_TABLE_SETTINGS_BEGIN, payload: action.username });
+        const result = await firebaseGetTableSettings(action.username);
+        dispatch({ type: GET_TABLE_SETTINGS_SUCCESS, payload: result });
+      },
+    SET_USER:
+      ({ dispatch }) =>
+      async (action) => {
+        dispatch({ type: SET_USER_BEGIN, payload: action.auth0User });
+        const user = await firebaseSetUser(action.auth0User);
+        dispatch({ type: SET_USER_SUCCESS, payload: user });
+      },
+  };
+
+  const [state, dispatch] = useReducerAsync(
+    reducer,
+    initialState,
+    asyncActionHandlers
+  );
 
   const [warningModal, setWarningModal] = useState(false);
-
-  const setUser = (user) => {
-    dispatch({ type: SET_USER, payload: user });
-  };
 
   const setTableTitle = (newTableTitle) => {
     dispatch({ type: SET_TABLE_TITLE, payload: newTableTitle });
@@ -184,43 +135,20 @@ const TableProvider = ({ children }) => {
 
   /** Update timeColumn when table controls are adjusted */
   useEffect(() => {
-    getTimes();
+    !state.loading && getTimes();
   }, [
     state.blockInterval,
     state.timeRange,
     state.currentTimeOnTop,
     state.currentTime,
+    state.loading,
   ]);
 
-  /** Local storage setters */
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(state.dayColumns));
-  }, [state.dayColumns]);
-
-  useEffect(() => {
-    localStorage.setItem('block_interval', JSON.stringify(state.blockInterval));
-  }, [state.blockInterval]);
-
-  useEffect(() => {
-    localStorage.setItem('block_size', JSON.stringify(state.blockSize));
-  }, [state.blockSize]);
-
-  useEffect(() => {
-    localStorage.setItem('time_range', JSON.stringify(state.timeRange));
-  }, [state.timeRange]);
-
-  useEffect(() => {
-    localStorage.setItem('table_title', JSON.stringify(state.tableTitle));
-  }, [state.tableTitle]);
-
-  useEffect(() => {
-    localStorage.setItem(
-      'current_time_on_top',
-      JSON.stringify(state.currentTimeOnTop)
-    );
-  }, [state.currentTimeOnTop]);
-
+  /**
+   * Log state and DB for development
+   */
   console.log('State:', state);
+  console.log('Firestore:', db);
   return (
     <TableContext.Provider
       value={{
@@ -238,7 +166,7 @@ const TableProvider = ({ children }) => {
         deleteTask,
         setTableTitle,
         setCurrentTimeOnTop,
-        setUser,
+        dispatch,
       }}
     >
       {children}

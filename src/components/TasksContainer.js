@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useTableContext } from '../reducers-contexts/table_context';
+import { useTableContext } from '../useReducer/table_context';
 import { DayColumn } from './DayColumn';
 import moment from 'moment';
 import { TimeColumn } from './TimeColumn';
@@ -35,7 +35,7 @@ export const TasksContainer = () => {
   };
 
   /**
-   * Desktop - return all dayColumns and one TimeColumn 
+   * Desktop - return all dayColumns and one TimeColumn
    * (TimeColumn in Table.js)
    * Mobile - return one TimeColumn per DayColumn
    */
@@ -63,7 +63,7 @@ export const TasksContainer = () => {
   );
 };
 
-  /** Desktop view */
+/** Desktop view */
 const WrapperDesktop = styled.section`
   width: 100%;
   display: grid;

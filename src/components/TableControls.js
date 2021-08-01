@@ -10,7 +10,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
-import { useTableContext } from '../reducers-contexts/table_context';
+import { useTableContext } from '../useReducer/table_context';
 import { WarningModal } from './WarningModal';
 import { useWindowSize } from '@react-hook/window-size/throttled';
 
@@ -31,7 +31,6 @@ export const TableControls = () => {
 
   const [width] = useWindowSize({ fps: 60 });
   const [expandedControls, setExpandedControls] = useState(false);
-
   return (
     <Wrapper expanded={expandedControls}>
       {width <= 800 ? (
@@ -44,7 +43,6 @@ export const TableControls = () => {
         </div>
       ) : null}
       <section className='left-side-controls'>
-        
         {/* Shift Days */}
         <div className='shift-days-container'>
           <BiRotateRight className='shift-days-icon' onClick={shiftDays} />
@@ -52,7 +50,7 @@ export const TableControls = () => {
             Shift days
           </label>
         </div>
-        
+
         {/* Block Interval */}
         <FormControl className='block-interval-container'>
           <Typography

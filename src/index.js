@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { TableProvider } from './reducers-contexts/table_context';
+import { TableProvider } from './useReducer/table_context';
 import { Auth0Provider } from '@auth0/auth0-react';
 
 ReactDOM.render(

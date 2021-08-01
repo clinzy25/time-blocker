@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { useTableContext } from '../reducers-contexts/table_context';
+import { useTableContext } from '../useReducer/table_context';
 import { FaWindowClose } from 'react-icons/fa';
 import { GiResize } from 'react-icons/gi';
 import moment from 'moment';
