@@ -10,15 +10,15 @@ export const Login = () => {
       <h1 className='title'>
         Time Blocker<span className='underscore'>_</span>
       </h1>
-      <span className='description'>
-        A customizable, web-based alternative to the traditional{' '}
+      <p className='description'>
+        A customizable, web-based alternative to the traditional&nbsp;
         <a
           className='link'
           href='https://todoist.com/productivity-methods/time-blocking'
         >
           time-block planner
         </a>
-      </span>
+      </p>
       <Button className='btn' variant='contained' onClick={loginWithRedirect}>
         Login / Sign Up
       </Button>
@@ -32,7 +32,7 @@ const Wrapper = styled.main`
   justify-content: center;
   align-items: center;
   flex-flow: column;
-  margin: 0 100px;
+  margin: 0 25px;
   font-family: 'Montserrat', sans-serif;
   color: var(--clr-text-light);
   letter-spacing: 3px;
