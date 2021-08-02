@@ -10,25 +10,28 @@ import {
   SET_TABLE_TITLE,
   SET_CURRENT_TIME_ON_TOP,
   SET_TASK_TEXT,
-  GET_TABLE_SETTINGS_BEGIN,
-  GET_TABLE_SETTINGS_SUCCESS,
+  GET_TABLE_DATA_BEGIN,
+  GET_TABLE_DATA_SUCCESS,
   SET_USER_BEGIN,
   SET_USER_SUCCESS,
+  ASYNC_UPDATE_DAY_COLUMN,
+  ASYNC_UPDATE_TABLE_SETTINGS,
 } from './table_actions';
 
 const table_reducer = (state, action) => {
+  console.log('Action: ', action.type);
   switch (action.type) {
     case SET_TABLE_TITLE:
       return { ...state, tableTitle: action.payload };
     case SET_USER_BEGIN: {
-      return { ...state, loading: true };
+      return { ...state, loading: true, loading_user: true };
     }
     case SET_USER_SUCCESS: {
-      return { ...state, user: action.payload };
+      return { ...state, loading_user: false, user: action.payload };
     }
-    case GET_TABLE_SETTINGS_BEGIN:
-      return { ...state, loading: true };
-      case GET_TABLE_SETTINGS_SUCCESS:
+    case GET_TABLE_DATA_BEGIN:
+      return { ...state, loading_data: true };
+    case GET_TABLE_DATA_SUCCESS:
       const {
         block_interval,
         block_size,
@@ -37,7 +40,6 @@ const table_reducer = (state, action) => {
         table_title,
         time_range,
       } = action.payload;
-      console.log(day_columns)
       return {
         ...state,
         blockInterval: block_interval,
@@ -46,8 +48,13 @@ const table_reducer = (state, action) => {
         tableTitle: table_title,
         timeRange: time_range,
         dayColumns: day_columns,
+        loading_data: false,
         loading: false,
       };
+    case ASYNC_UPDATE_DAY_COLUMN:
+      return { ...state };
+    case ASYNC_UPDATE_TABLE_SETTINGS:
+      return { ...state };
     /**
      * Table Controls
      */
@@ -173,7 +180,7 @@ const table_reducer = (state, action) => {
       };
 
     default:
-      throw new Error('No matching action type');
+      console.error('No matching action type: ', action.type);
   }
 };
 

@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import reducer from './table_reducer';
 import moment from 'moment';
 import {
@@ -13,14 +13,20 @@ import {
   SET_TABLE_TITLE,
   SET_CURRENT_TIME_ON_TOP,
   SET_TASK_TEXT,
-  GET_TABLE_SETTINGS_BEGIN,
-  GET_TABLE_SETTINGS_SUCCESS,
+  GET_TABLE_DATA_BEGIN,
+  GET_TABLE_DATA_SUCCESS,
   SET_USER_BEGIN,
   SET_USER_SUCCESS,
+  ASYNC_UPDATE_DAY_COLUMN,
+  ASYNC_UPDATE_TABLE_SETTINGS,
 } from './table_actions';
-import db from '../firebase';
 import { useReducerAsync } from 'use-reducer-async';
-import { firebaseGetTableSettings, firebaseSetUser } from './firebase_actions';
+import {
+  firebaseGetTableData,
+  firebaseSetUser,
+  firebaseUpdateDayColumn,
+  firebaseUpdateTableSettings,
+} from './firebase_actions';
 
 const TableContext = React.createContext();
 
@@ -36,23 +42,111 @@ const initialState = {
   timeColumn: [],
   isWarningModalOpen: false,
   loading: true,
+  loading_user: true,
+  loading_data: false,
+  dayColumns: [
+    {
+      id: 'monday',
+      tasks: [],
+    },
+    {
+      id: 'tuesday',
+      tasks: [],
+    },
+    {
+      id: 'wednesday',
+      tasks: [],
+    },
+    {
+      id: 'thursday',
+      tasks: [],
+    },
+    {
+      id: 'friday',
+      tasks: [],
+    },
+    {
+      id: 'saturday',
+      tasks: [],
+    },
+    {
+      id: 'sunday',
+      tasks: [],
+    },
+  ],
+  blockInterval: 30,
+  blockSize: 200,
+  timeRange: [9, 17],
+  tableTitle: 'TASKS',
+  currentTimeOnTop: false,
 };
 
 const TableProvider = ({ children }) => {
   const asyncActionHandlers = {
-    TABLE_SETTINGS:
+    TABLE_DATA:
       ({ dispatch }) =>
       async (action) => {
-        dispatch({ type: GET_TABLE_SETTINGS_BEGIN, payload: action.username });
-        const result = await firebaseGetTableSettings(action.username);
-        dispatch({ type: GET_TABLE_SETTINGS_SUCCESS, payload: result });
+        dispatch({ type: GET_TABLE_DATA_BEGIN, payload: action.username });
+        const result = await firebaseGetTableData(action.username);
+        dispatch({ type: GET_TABLE_DATA_SUCCESS, payload: result });
       },
     SET_USER:
       ({ dispatch }) =>
       async (action) => {
-        dispatch({ type: SET_USER_BEGIN, payload: action.auth0User });
-        const user = await firebaseSetUser(action.auth0User);
+        const {
+          auth0User,
+          blockInterval,
+          blockSize,
+          timeRange,
+          tableTitle,
+          currentTimeOnTop,
+          dayColumns,
+        } = action;
+        dispatch({
+          type: SET_USER_BEGIN,
+          payload: {
+            auth0User,
+            blockInterval,
+            blockSize,
+            timeRange,
+            tableTitle,
+            currentTimeOnTop,
+            dayColumns,
+          },
+        });
+        const user = await firebaseSetUser(
+          auth0User,
+          blockInterval,
+          blockSize,
+          timeRange,
+          tableTitle,
+          currentTimeOnTop,
+          dayColumns
+        );
         dispatch({ type: SET_USER_SUCCESS, payload: user });
+      },
+    UPDATE_DAY_COLUMN:
+      ({ dispatch }) =>
+      async (action) => {
+        const { dayColumn, userName } = action;
+        dispatch({
+          type: ASYNC_UPDATE_DAY_COLUMN,
+          dayColumn,
+          userName,
+        });
+        await firebaseUpdateDayColumn(dayColumn, userName);
+      },
+    UPDATE_TABLE_SETTINGS:
+      ({ dispatch }) =>
+      async (action) => {
+        const { setting, value, userName } = action;
+        dispatch({
+          type: ASYNC_UPDATE_TABLE_SETTINGS,
+          setting,
+          value,
+          userName,
+        });
+        await firebaseUpdateTableSettings(setting, value, userName);
       },
   };
 
@@ -144,11 +238,69 @@ const TableProvider = ({ children }) => {
     state.loading,
   ]);
 
+  useEffect(() => {
+    !state.loading &&
+      dispatch({
+        type: 'UPDATE_DAY_COLUMN',
+        dayColumn: state.dayColumns,
+        userName: state.user.name,
+      });
+  }, [state.dayColumns]);
+
+  useEffect(() => {
+    !state.loading &&
+      dispatch({
+        type: 'UPDATE_TABLE_SETTINGS',
+        setting: 'block_interval',
+        value: state.blockInterval,
+        userName: state.user.name,
+      });
+  }, [state.loading, state.blockInterval]);
+  
+  useEffect(() => {
+    !state.loading &&
+      dispatch({
+        type: 'UPDATE_TABLE_SETTINGS',
+        setting: 'block_size',
+        value: state.blockSize,
+        userName: state.user.name,
+      });
+  }, [state.loading, state.blockSize]);
+
+  useEffect(() => {
+    !state.loading &&
+      dispatch({
+        type: 'UPDATE_TABLE_SETTINGS',
+        setting: 'current_time_on_top',
+        value: state.currentTimeOnTop,
+        userName: state.user.name,
+      });
+  }, [state.loading, state.currentTimeOnTop]);
+
+  useEffect(() => {
+    !state.loading &&
+      dispatch({
+        type: 'UPDATE_TABLE_SETTINGS',
+        setting: 'time_range',
+        value: state.timeRange,
+        userName: state.user.name,
+      });
+  }, [state.loading, state.timeRange]);
+
+  useEffect(() => {
+    !state.loading &&
+      dispatch({
+        type: 'UPDATE_TABLE_SETTINGS',
+        setting: 'table_title',
+        value: state.tableTitle,
+        userName: state.user.name,
+      });
+  }, [state.loading, state.tableTitle]);
+
   /**
    * Log state and DB for development
    */
   console.log('State:', state);
-  console.log('Firestore:', db);
   return (
     <TableContext.Provider
       value={{

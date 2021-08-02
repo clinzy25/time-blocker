@@ -3,7 +3,6 @@ import { useTableContext } from '../useReducer/table_context';
 import { Table } from './Table';
 import loadingGif from '../images/preloader.gif';
 
-
 export const TableContainer = () => {
   const { tableTitle, setTableTitle, loading } = useTableContext();
 
@@ -13,7 +12,12 @@ export const TableContainer = () => {
         className='title'
         type='text'
         defaultValue={tableTitle}
-        onChange={(e) => setTableTitle(e.target.value)}
+        onBlur={(e) => setTableTitle(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') {
+            e.target.blur();
+          }
+        }}
       />
       {loading ? <img src={loadingGif} alt='loading' /> : <Table />}
     </Wrapper>

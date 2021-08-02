@@ -1,71 +1,59 @@
 import db from '../firebase';
 
-export const firebaseSetUser = (auth0User) => {
-  const user = {
-    user: { ...auth0User },
-    day_columns: [
-      {
-        id: 'monday',
-        tasks: [],
-      },
-      {
-        id: 'tuesday',
-        tasks: [],
-      },
-      {
-        id: 'wednesday',
-        tasks: [],
-      },
-      {
-        id: 'thursday',
-        tasks: [],
-      },
-      {
-        id: 'friday',
-        tasks: [],
-      },
-      {
-        id: 'saturday',
-        tasks: [],
-      },
-      {
-        id: 'sunday',
-        tasks: [],
-      },
-    ],
-    block_interval: 30,
-    block_size: 200,
-    time_range: [9, 17],
-    table_title: 'TASKS',
-    current_time_on_top: false,
-  };
-  db.collection('users')
-    .doc(auth0User.nickname)
-    .set({
-      user,
-    })
-    .then(() => {
-      console.log('Document written with ID: ', auth0User.nickname);
-    })
-    .catch((e) => {
-      console.error('Error adding document: ', e);
-    });
-    return user.user;
+export const firebaseSetUser = (
+  auth0User,
+  blockInterval,
+  blockSize,
+  timeRange,
+  tableTitle,
+  currentTimeOnTop,
+  dayColumns
+) => {
+  
+  const docRef = db.collection('users').doc(auth0User.name);
+  
+  const user = docRef.get().then(async (doc) => {
+    if (doc.exists) {
+      const data = await doc.data();
+      return data.user.user;
+    } else {
+      const user = {
+        user: { ...auth0User },
+        block_interval: blockInterval,
+        block_size: blockSize,
+        time_range: timeRange,
+        table_title: tableTitle,
+        current_time_on_top: currentTimeOnTop,
+        day_columns: dayColumns,
+      };
+      db.collection('users')
+        .doc(auth0User.name)
+        .set({
+          user,
+        })
+        .then(() => {
+          console.log('Document written with ID: ', auth0User.name);
+        })
+        .catch((e) => {
+          console.error('Error adding document: ', e);
+        });
+      return user.user;
+    }
+  });
+  return user;
 };
 
-export const firebaseGetTableSettings = async (username) => {
+/**
+ * Fetch table settings from Firbase by username
+ * @param {string} username
+ * @returns Table settings as an object
+ */
+export const firebaseGetTableData = async (username) => {
   const docRef = db.collection('users').doc(username);
   const result = docRef
     .get()
     .then(async (doc) => {
-      if (doc.exists) {
-        const data = await doc.data();
-        return data;
-      } else {
-        console.log('No such document!');
-      }
-    })
-    .then((data) => {
+      const data = await doc.data();
       const {
         block_interval,
         block_size,
@@ -88,4 +76,44 @@ export const firebaseGetTableSettings = async (username) => {
       console.log('Error getting document:', error);
     });
   return result;
+};
+
+export const firebaseUpdateDayColumn = (dayColumn, username) => {
+  const docRef = db.collection('users').doc(username);
+  docRef.update({
+    'user.day_columns': dayColumn,
+  });
+};
+
+export const firebaseUpdateTableSettings = (setting, value, username) => {
+  const docRef = db.collection('users').doc(username);
+  switch (setting) {
+    case 'block_interval':
+      docRef.update({
+        'user.block_interval': value,
+      });
+      break;
+    case 'block_size':
+      docRef.update({
+        'user.block_size': value,
+      });
+      break;
+    case 'current_time_on_top':
+      docRef.update({
+        'user.current_time_on_top': value,
+      });
+      break;
+    case 'time_range':
+      docRef.update({
+        'user.time_range': value,
+      });
+      break;
+    case 'table_title':
+      docRef.update({
+        'user.table_title': value,
+      });
+      break;
+    default:
+      console.error('No matching setting');
+  }
 };

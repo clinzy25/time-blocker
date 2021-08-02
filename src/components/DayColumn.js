@@ -13,8 +13,14 @@ import moment from 'moment';
  * @returns column header, empty task slots or tasks, if available
  */
 export const DayColumn = ({ columnDay, date }) => {
-  const { timeColumn, addTask, blockInterval, dayColumns, currentTime } =
-    useTableContext();
+  const {
+    timeColumn,
+    addTask,
+    blockInterval,
+    dayColumns,
+    currentTime,
+    dispatch,
+  } = useTableContext();
 
   /** For button hover effect */
   const [btnKey, setBtnKey] = useState(null);
@@ -87,7 +93,7 @@ export const DayColumn = ({ columnDay, date }) => {
                 opacity: `${cellTime === btnKey ? '1' : '0'}`,
               }}
               onClick={() => {
-                addTask({
+                const task = {
                   key: cellTime,
                   dayOfWeek: columnDay,
                   date: date,
@@ -96,7 +102,8 @@ export const DayColumn = ({ columnDay, date }) => {
                   initalBlockSize: blockInterval,
                   title: '',
                   description: '',
-                });
+                };
+                addTask(task);
               }}
             />
 

@@ -96,7 +96,12 @@ export const Task = ({ task }) => {
           className='task-title'
           defaultValue={title}
           // autoFocus
-          onChange={(e) => setTaskText('title', e.target.value, key, dayOfWeek)}
+          onBlur={(e) => setTaskText('title', e.target.value, key, dayOfWeek)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              e.target.blur();
+            }
+          }}
         />
       </div>
       <span className='time-range'>
@@ -110,9 +115,14 @@ export const Task = ({ task }) => {
           placeholder='description...'
           className='description'
           defaultValue={description}
-          onChange={(e) =>
+          onBlur={(e) =>
             setTaskText('description', e.target.value, key, dayOfWeek)
           }
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              e.target.blur();
+            }
+          }}
         />
       )}
       {/* <MdDragHandle className='drag-handle' /> */}
