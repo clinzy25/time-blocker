@@ -1,5 +1,18 @@
 import db from '../firebase';
 
+/**
+ * If user exists in firebase by username, get associated data
+ * Else add auth0User data to firebase as a new user with 
+ * intiial state values from reducer
+ * @param {object} auth0User 
+ * @param {number} blockInterval 
+ * @param {number} blockSize 
+ * @param {number[]} timeRange 
+ * @param {string} tableTitle 
+ * @param {boolean} currentTimeOnTop 
+ * @param {object[]} dayColumns 
+ * @returns user
+ */
 export const firebaseSetUser = (
   auth0User,
   blockInterval,
@@ -9,9 +22,7 @@ export const firebaseSetUser = (
   currentTimeOnTop,
   dayColumns
 ) => {
-  
   const docRef = db.collection('users').doc(auth0User.name);
-  
   const user = docRef.get().then(async (doc) => {
     if (doc.exists) {
       const data = await doc.data();
@@ -78,6 +89,11 @@ export const firebaseGetTableData = async (username) => {
   return result;
 };
 
+/**
+ * When a task is added or edited, send the updated dayColumn to firebase
+ * @param {object[]} dayColumn 
+ * @param {string} username 
+ */
 export const firebaseUpdateDayColumn = (dayColumn, username) => {
   const docRef = db.collection('users').doc(username);
   docRef.update({
@@ -85,6 +101,12 @@ export const firebaseUpdateDayColumn = (dayColumn, username) => {
   });
 };
 
+/**
+ * Update table settings in firebase by setting and username
+ * @param {string} setting 
+ * @param {number, number[], string} value 
+ * @param {string} username 
+ */
 export const firebaseUpdateTableSettings = (setting, value, username) => {
   const docRef = db.collection('users').doc(username);
   switch (setting) {

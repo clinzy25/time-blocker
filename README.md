@@ -1,6 +1,6 @@
 Live at: https://time-blocker.netlify.app/
 
-Create a .env and add your Auth0 credentials
+Create .env and add your Auth0 and Firebase credentials
 
 In project root:
 - npm install

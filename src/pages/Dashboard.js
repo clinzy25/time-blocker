@@ -24,6 +24,11 @@ export const Dashboard = () => {
    */
   const user = useAuth0();
 
+  /**
+   * If user is authenticated by Auth0, send user data and initial table settings
+   * to Firebase for handling
+   * When the user is done loading, fetch table data from firebase
+   */
   useEffect(() => {
     if (user.isAuthenticated && !loading_data) {
       const auth0User = user.user;

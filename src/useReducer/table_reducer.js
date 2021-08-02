@@ -19,7 +19,10 @@ import {
 } from './table_actions';
 
 const table_reducer = (state, action) => {
-  console.log('Action: ', action.type);
+  /**
+   * Log actions for development
+   */
+  // console.log('Action: ', action.type);
   switch (action.type) {
     case SET_TABLE_TITLE:
       return { ...state, tableTitle: action.payload };

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import reducer from './table_reducer';
 import moment from 'moment';
+import { useReducerAsync } from 'use-reducer-async';
 import {
   SET_BLOCK_INTERVAL,
   GET_TIMES,
@@ -20,7 +21,6 @@ import {
   ASYNC_UPDATE_DAY_COLUMN,
   ASYNC_UPDATE_TABLE_SETTINGS,
 } from './table_actions';
-import { useReducerAsync } from 'use-reducer-async';
 import {
   firebaseGetTableData,
   firebaseSetUser,
@@ -41,9 +41,6 @@ const initialState = {
   currentTime: new Date().getTime(),
   timeColumn: [],
   isWarningModalOpen: false,
-  loading: true,
-  loading_user: true,
-  loading_data: false,
   dayColumns: [
     {
       id: 'monday',
@@ -75,13 +72,21 @@ const initialState = {
     },
   ],
   blockInterval: 30,
-  blockSize: 200,
+  blockSize: 300,
   timeRange: [9, 17],
   tableTitle: 'TASKS',
   currentTimeOnTop: false,
+  loading: true,
+  loading_user: true,
+  loading_data: false,
 };
 
 const TableProvider = ({ children }) => {
+  /**
+   * Handle firebase updates with use-reducer-async library
+   * See link for usage
+   * @link - https://github.com/dai-shi/use-reducer-async
+   */
   const asyncActionHandlers = {
     TABLE_DATA:
       ({ dispatch }) =>
@@ -90,6 +95,7 @@ const TableProvider = ({ children }) => {
         const result = await firebaseGetTableData(action.username);
         dispatch({ type: GET_TABLE_DATA_SUCCESS, payload: result });
       },
+
     SET_USER:
       ({ dispatch }) =>
       async (action) => {
@@ -125,6 +131,7 @@ const TableProvider = ({ children }) => {
         );
         dispatch({ type: SET_USER_SUCCESS, payload: user });
       },
+
     UPDATE_DAY_COLUMN:
       ({ dispatch }) =>
       async (action) => {
@@ -136,6 +143,7 @@ const TableProvider = ({ children }) => {
         });
         await firebaseUpdateDayColumn(dayColumn, userName);
       },
+
     UPDATE_TABLE_SETTINGS:
       ({ dispatch }) =>
       async (action) => {
@@ -149,15 +157,18 @@ const TableProvider = ({ children }) => {
         await firebaseUpdateTableSettings(setting, value, userName);
       },
   };
-
+  /** Extend useReducer's dispatch so that dispatching async actions invoke async functions */
   const [state, dispatch] = useReducerAsync(
     reducer,
     initialState,
     asyncActionHandlers
   );
 
+  /** Simple state value to determine if modal is open */
   const [warningModal, setWarningModal] = useState(false);
 
+  ///////////////////////////////////////////////////////////////////////
+  // Action creators ////////////////////////////////////////////////////
   const setTableTitle = (newTableTitle) => {
     dispatch({ type: SET_TABLE_TITLE, payload: newTableTitle });
   };
@@ -219,6 +230,9 @@ const TableProvider = ({ children }) => {
     dispatch({ type: DELETE_TASK, payload: { key, dayOfWeek } });
   };
 
+  ///////////////////////////////////////////////////////////////////////
+  // UseEffects ////////////////////////////////////////////////////
+
   /** Update current time once per minute */
   useEffect(() => {
     setInterval(() => {
@@ -238,6 +252,7 @@ const TableProvider = ({ children }) => {
     state.loading,
   ]);
 
+  /** Update dayColumn in firebase when table task is added or edited are adjusted */
   useEffect(() => {
     !state.loading &&
       dispatch({
@@ -247,6 +262,9 @@ const TableProvider = ({ children }) => {
       });
   }, [state.dayColumns]);
 
+  /**
+   * Update table settings individually in firebase when they are adjusted
+   */
   useEffect(() => {
     !state.loading &&
       dispatch({
@@ -256,7 +274,7 @@ const TableProvider = ({ children }) => {
         userName: state.user.name,
       });
   }, [state.loading, state.blockInterval]);
-  
+
   useEffect(() => {
     !state.loading &&
       dispatch({
@@ -298,9 +316,9 @@ const TableProvider = ({ children }) => {
   }, [state.loading, state.tableTitle]);
 
   /**
-   * Log state and DB for development
+   * Log state for development
    */
-  console.log('State:', state);
+  // console.log('State:', state);
   return (
     <TableContext.Provider
       value={{
