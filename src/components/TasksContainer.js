@@ -18,8 +18,9 @@ export const TasksContainer = () => {
     daysOfWeek.indexOf(moment(currentTime).format('dddd').toLowerCase()) + 1;
 
   /**
-   * Current day of week will show today's date, and all previous and subsequent dates
-   * are derived from it.
+   * Get dates to display under day of week.
+   * Current day of week will show today's date, 
+   * and all previous and subsequent dates are derived from it.
    * @param {number} dayIndex
    * @param {string} dayName
    * @returns date for column header

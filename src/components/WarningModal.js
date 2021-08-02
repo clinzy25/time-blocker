@@ -3,6 +3,10 @@ import Button from '@material-ui/core/Button';
 import { IoAlertCircle } from 'react-icons/io5';
 import { useTableContext } from '../useReducer/table_context';
 
+/**
+ * This modal appears when the user clicks 'Clear Table' button. Asks for confirmation.
+ * @returns Modal
+ */
 export const WarningModal = () => {
   const { setWarningModal, clearTable } = useTableContext();
 

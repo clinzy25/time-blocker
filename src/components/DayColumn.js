@@ -8,6 +8,7 @@ import useScrollPosition from '@react-hook/window-scroll';
 import moment from 'moment';
 
 /**
+ * One Column for each day of the week, each contains its own list of tasks
  * @param {string} columnDay - day of week of DayColumn
  * @param {string} date - formatted date to display under header
  * @returns column header, empty task slots or tasks, if available
@@ -19,12 +20,10 @@ export const DayColumn = ({ columnDay, date }) => {
     blockInterval,
     dayColumns,
     currentTime,
-    dispatch,
   } = useTableContext();
 
   /** For button hover effect */
   const [btnKey, setBtnKey] = useState(null);
-
   const [width] = useWindowSize({ fps: 60 });
   /** Used to determine if column headers on top for sticky positioning */
   const scrollY = useScrollPosition(60 /*fps*/);
@@ -92,6 +91,7 @@ export const DayColumn = ({ columnDay, date }) => {
               style={{
                 opacity: `${cellTime === btnKey ? '1' : '0'}`,
               }}
+              /** Add task on click */
               onClick={() => {
                 const task = {
                   key: cellTime,

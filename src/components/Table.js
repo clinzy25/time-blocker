@@ -9,8 +9,7 @@ export const Table = () => {
 
   /**
    * Desktop - render time column
-   * Mobile - TimeColumn rendering passed to TaskContainer
-   * so that 7 can be rendered
+   * Mobile - TimeColumn rendering passed to TaskContainer so that 7 can be rendered
    */
   return width >= 1100 ? (
     <WrapperDesktop>

@@ -2,10 +2,15 @@ import styled from 'styled-components';
 import { useTableContext } from '../useReducer/table_context';
 import moment from 'moment';
 
+/**
+ * Get times for timeColumn
+ * @returns The vertical tape of times on the left side of the screen
+ */
 export const TimeColumn = () => {
   const { timeColumn, blockSize } = useTableContext();
 
   return (
+    // BlockSize determines height of cell
     <Wrapper blockSize={blockSize}>
       {timeColumn.map((time, index) => {
         return (

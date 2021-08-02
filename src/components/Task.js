@@ -8,7 +8,7 @@ import { MdDragHandle } from 'react-icons/md';
 import Draggable, { DraggableCore } from 'react-draggable';
 
 /**
- * Each task's state is contained in this file.
+ * A task added after clicking the 'add task' icon
  * @param {object} task - Task from dayColumns.tasks
  * @returns A task
  */
@@ -50,6 +50,7 @@ export const Task = ({ task }) => {
   );
 
   /**
+   * Check if task is the 'current' task (according to current time)
    * @param props - Styled components props attribute
    * @returns - true if currentTime is within task start/end time, else false
    * Used to style current task
@@ -74,6 +75,7 @@ export const Task = ({ task }) => {
       taskHeight={taskHeight}
       date={date}
     >
+      
       {/* Buttons */}
       <div className='title-btns-container'>
         <div className='btn-container'>
@@ -141,7 +143,7 @@ const Wrapper = styled.div`
   border-radius: 5px;
   box-shadow: 2px 2px 7px #121212;
   min-height: 75px;
-  /** Props change if task is current task */
+  /** Change CSS if task is current task */
   border: ${(props) =>
     props.isCurrentTask(props)
       ? '3px solid var(--clr-accent)'

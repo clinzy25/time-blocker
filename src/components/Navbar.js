@@ -10,6 +10,7 @@ export const Navbar = () => {
         Time Blocker<span className='underscore'>_</span>
       </h1>
       <div className='right-side-items'>
+        {/* TODO -- Accessibility controls */}
         <h3 className='accessibility'>Accessibility</h3>
         <span
           className='logout'

@@ -30,7 +30,9 @@ export const TableControls = () => {
   } = useTableContext();
 
   const [width] = useWindowSize({ fps: 60 });
+  /** For mobile view, table controls will be hidden until user expands them */
   const [expandedControls, setExpandedControls] = useState(false);
+  
   return (
     <Wrapper expanded={expandedControls}>
       {width <= 800 ? (
