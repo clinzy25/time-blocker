@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
@@ -5,23 +6,47 @@ import Button from '@material-ui/core/Button';
 export const Login = () => {
   const { loginWithRedirect } = useAuth0();
 
+  const [language, setLanguage] = useState('es');
+
+  const localization = {
+    en: {
+      description: 'A customizable, web-based alternative to the traditional ',
+      link: 'time-block planner.',
+      btn: 'Login / Signup',
+    },
+    es: {
+      description:
+        'Una alternativa personalizable basada en la web a la tradicional ',
+      link: 'planificador de bloque de tiempo.',
+      btn: 'Iniciar sesión / Registrarse',
+    },
+  };
+
   return (
     <Wrapper>
       <h1 className='title'>
         Time Blocker<span className='underscore'>_</span>
       </h1>
       <p className='description'>
-        A customizable, web-based alternative to the traditional&nbsp;
+        {localization[language].description}
         <a
           className='link'
           href='https://todoist.com/productivity-methods/time-blocking'
         >
-          time-block planner
+          {localization[language].link}
         </a>
       </p>
       <Button className='btn' variant='contained' onClick={loginWithRedirect}>
-        Login / Sign Up
+        {localization[language].btn}
       </Button>
+      <div className='language'>
+        <Button className='btn' onClick={() => setLanguage('en')} type='button'>
+          English
+        </Button>
+        <Button className='btn' onClick={() => setLanguage('es')} type='button'>
+          Spanish
+        </Button>
+      </div>
     </Wrapper>
   );
 };
@@ -63,6 +88,7 @@ const Wrapper = styled.main`
     background-color: var(--clr-accent);
     transition: transform 0.2s;
     box-shadow: 6px 6px 10px #121212;
+    margin: 10px;
     :hover {
       background-color: var(--clr-accent);
       filter: brightness(110%);
@@ -72,5 +98,11 @@ const Wrapper = styled.main`
     :active {
       transform: translateY(3px);
     }
+  }
+  .language {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
   }
 `;
