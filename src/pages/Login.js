@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 export const Login = () => {
   const { loginWithRedirect } = useAuth0();
 
-  const [language, setLanguage] = useState('es');
+  const [language, setLanguage] = useState('en');
 
   const localization = {
     en: {
